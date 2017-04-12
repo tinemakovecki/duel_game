@@ -9,6 +9,7 @@ root.title("Beyblade")
 class GUI():
 
     #selecting window size by hand:
+    # TODO flexible window
     Window_height = 300
     Window_width = 200
 
@@ -19,6 +20,7 @@ class GUI():
 
 
         # TODO bigger buttons
+        # TODO how to write smaller button text
         # creating the buttons for player 1
         # player 1 is at the bottom of the screen
         self.Player1_Button1 = tkinter.Button(self.Game_window, text="attack_1", command=self.attack1)
@@ -37,36 +39,66 @@ class GUI():
         # creating the buttons for player 2
         # player 2 is at the top of the screen
         self.Player2_Button1 = tkinter.Button(self.Game_window, text="attack_1", command=self.attack5)
-        self.Player2_Button1.grid(row=1, column=0, columnspan=2)
+        self.Player2_Button1.grid(row=0, column=0, columnspan=2)
 
         self.Player2_Button2 = tkinter.Button(self.Game_window, text="attack_2", command=self.attack6)
-        self.Player2_Button2.grid(row=1, column=2, columnspan=2)
+        self.Player2_Button2.grid(row=0, column=2, columnspan=2)
 
         self.Player2_Button3 = tkinter.Button(self.Game_window, text="attack_3", command=self.attack7)
-        self.Player2_Button3.grid(row=2, column=0, columnspan=2)
+        self.Player2_Button3.grid(row=1, column=0, columnspan=2)
 
         self.Player2_Button4 = tkinter.Button(self.Game_window, text="attack_4", command=self.attack8)
-        self.Player2_Button4.grid(row=2, column=2, columnspan=2)
+        self.Player2_Button4.grid(row=1, column=2, columnspan=2)
 
 
-        # HEALTH BARS AS A WIDGET? - TODO
-        self.Player1_Health_Bar = ttk.Progressbar(self.Game_window, orient="horizontal", length=200, maximum=1000, value=1000)
+        # creating the health bars
+        self.Player1_Health_Bar = ttk.Progressbar(self.Game_window, orient="horizontal", length=200, maximum=1000,
+                                                  value=1000)
         self.Player1_Health_Bar.grid(row=5, column=1, columnspan=2)
         self.Player1_Health = 1000
 
-        self.Test_Button = tkinter.Button(self.Game_window, text="test_punch", command=self.deal_damage) # for checking if the healthbar works
-        self.Test_Button.grid(row=5, column=3)
+        self.Player1_Health_Bar = ttk.Progressbar(self.Game_window, orient="horizontal", length=200, maximum=1000,
+                                                  value=1000)
+        self.Player1_Health_Bar.grid(row=2, column=1, columnspan=2)
+        self.Player1_Health = 1000
+
+        # for checking if the healthbar works
+        #self.Test_Button = tkinter.Button(self.Game_window, text="test_punch", command=self.deal_damage)
+        #self.Test_Button.grid(row=5, column=3)
 
 
         # creating the game image
         self.Game_picture = tkinter.Canvas(self.Game_window, background='white')
         self.Game_picture.grid(row=3, rowspan=2, column=0, columnspan=4)
-        self.draw_game_picture()
+        self.draw_game_picture() # have to put all image drawng in one function
 
+        # setting background
+        # TODO fitting background to canvas
+        self.Background = tkinter.PhotoImage(file='background.png')
+        self.Background_image = self.Game_picture.create_image(200, 200, image=self.Background)
+
+        # inserting sprites
+        self.Player1_sprite = tkinter.PhotoImage(file='Pikachu.png')
+        self.Player1_sprite_image = self.Game_picture.create_image(GUI.Window_width, GUI.Window_height * 3 // 4,
+                                                                   image=self.Player1_sprite)
+
+        self.Player2_sprite = tkinter.PhotoImage(file='Charmander.png')
+        self.Player2_sprite_image = self.Game_picture.create_image(GUI.Window_width, GUI.Window_height // 4,
+                                                                   image=self.Player2_sprite)
 
         # TODO game menu
+        # Main menu
+        self.Menu = tkinter.Menu(master)
+        master.config(menu=self.Menu)
+
+        # Submenu
+        self.Game_menu = tkinter.Menu(self.Menu)
+        self.Menu.add_cascade(label="Game", menu=self.Game_menu)
+        self.Game_menu.add_command(label="Quit", command=self.quit)
+        self.Game_menu.add_command(label="New game", command=self.new_game)
 
 
+    # but why?
     def draw_game_picture(self):
         '''draws the image of the game'''
         self.Game_picture.create_line(0, 0, 20, 20)
@@ -105,6 +137,14 @@ class GUI():
         pass
 
     def attack8(self):
+        # TODO
+        pass
+
+    def quit(self):
+        # TODO
+        pass
+
+    def new_game(self):
         # TODO
         pass
 
