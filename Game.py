@@ -8,12 +8,11 @@ Not_over = "game isn't over"
 
 class Game():
     def __init__(self):
-        # TODO monster class
         # players are the same monster for now
         self.Player_1 = Monster('Pik')
         self.Player_2 = Monster('Char')
-        self.Active_modifiers1 = [] # (turn started, lasts for, effects)?
-        self.Active_modifiers2 = []
+        self.Active_modifiers1 = {} # (modifier, turn started) # TODO check if modifier is over each turn
+        self.Active_modifiers2 = {}
         # saving player character data somewhere else?
 
         self.Current_player = Player_1
@@ -29,6 +28,8 @@ class Game():
         '''does one game turn'''
         # miss/hit -> deal damage -> check game state -> next turn
         # TODO unified attack names for reference
+        self.Turn_number += 1
+        self.update_modifiers()
 
         # checking hit/miss
         Chance = Selected_attack[1] #   TODO better name for chance
@@ -38,6 +39,19 @@ class Game():
         if Hit == True:
             Damage = calculate_damage(Selected_attack, self.Active_modifiers)
             self.Opponent(self.Current_player).HP -= Damage
+
+        # activating new modifiers
+        if random.random() < 0.3:
+            Modifier_try = Player_1.Modifiers[self.Current_player[Selected_attack[2]]] #recimo, da je tut selected_attack samo ime!
+            if self.Opponent(self.Current_player) == self.Player1:
+                if Selected_attack[2][2] == "opponent":
+                    self.Active_modifiers1[Selected_attack[2]] #TODO finish <- this
+                elif Selected_attack[2][2] == "self":
+                    self.Active_modifiers2[Selected_attack[2]]
+            else:
+                self.Active_modifiers1
+                self.Active_modifiers2
+
 
         # checks the game state
         Winner = self.check_game_state()
@@ -67,6 +81,16 @@ class Game():
         else:
             assert False, "invalid opponent"
 
+    def update_modifiers(self):
+        '''checks active modifiers and removes expired ones'''
+        for mod in self.Active_modifiers1:
+            if self.Turn_number - mod[1] < 3:
+                del self.Active_modifiers1[mod]
+
+        for mod in self.Active_modifiers2:
+            if self.Turn_number - mod[1] < 3:
+                del self.Active_modifiers2
+
 
 def hit_check(player, attack_chance, modifiers): # TODO attack as paramaeter instead of attack chance?
     '''checks if an attack hits or misses'''
@@ -90,13 +114,19 @@ class Monster():
     def __init__(self, Name):
         self.Name = Name
         self.HP = 10000
-        self.attack1 = (50, 50)
-        self.attack2 = (20, 80)
-        self.attack3 = (90, 5)
-        self.attack4 = (10, 90)
-        # TODO modifiers
-        self.modifiers =[]
+        # TODO attack names
+        self.attack1 = (50, 50, "knockdown")
+        self.attack2 = (20, 80, "blind")
+        self.attack3 = (90, 5, "focus")
+        self.attack4 = (10, 90, "berserk")
 
+        # TODO modifiers
+        # meaning: knockdown(accuracy: -10, damage: -5)
+        # percent accuracy/damage reduction?
+        self.modifiers = {"knockdown": (-10, -5, "opponent"), "blind":(-20, 0, "opponent"), "focus":(10, 0, "self"), "berserk":(-10, 10, "both")}
+
+
+    # TODO define modifiers as subclass???
     # TODO try to fix
     #def change_attack(self, old_attack, new_attack):
     #    '''changes an attack of a monster'''
