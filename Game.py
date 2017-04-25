@@ -1,4 +1,5 @@
 ### GAME LOGIC FILE
+# TODO just remake this shit
 import random
 
 Player_1 = "1"
@@ -109,6 +110,8 @@ def calculate_damage(attack_damage, modifiers):
 
 
 #### MONSTER CLASS - WILL BE IN OWN FILE
+# TODO DELETE
+# TODO connect class and game file
 
 class Monster():
     def __init__(self, Name):
@@ -124,21 +127,5 @@ class Monster():
         # meaning: knockdown(accuracy: -10, damage: -5)
         # percent accuracy/damage reduction?
         self.modifiers = {"knockdown": (-10, -5, "opponent"), "blind":(-20, 0, "opponent"), "focus":(10, 0, "self"), "berserk":(-10, 10, "both")}
-
-
-    # TODO define modifiers as subclass???
-    # TODO try to fix
-    #def change_attack(self, old_attack, new_attack):
-    #    '''changes an attack of a monster'''
-    #    # not sure if need
-    #    self.old_attack = new_attack
-
-    #def attack_damage(self, attack):
-    #    '''returns attack damage'''
-    #    return self.attack[0]
-
-    #def hit_chance(self, attack):
-    #    '''returns hit chance'''
-    #    return self.attack[1]
 
 Pikachu = Monster('Pikachu')
