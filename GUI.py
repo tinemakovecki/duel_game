@@ -1,10 +1,12 @@
 ### THE USER INTERFACE
 import tkinter
 from tkinter import ttk
+import Game
+import Player
 
 root = tkinter.Tk()
 # TODO GET A NAME
-root.title("Beyblade")
+root.title("Duel Game")
 
 class GUI():
 
@@ -19,35 +21,35 @@ class GUI():
         self.Game_window.pack()
 
 
-        # TODO bigger buttons
-        # TODO how to write smaller button text
+        # TODO nicer buttons
         # creating the buttons for player 1
         # player 1 is at the bottom of the screen
-        self.Player1_Button1 = tkinter.Button(self.Game_window, text="attack_1", command=self.attack1)
-        self.Player1_Button1.grid(row=6, column=0, columnspan=2)
+        self.Player1_Button1 = tkinter.Button(self.Game_window, text="attack_1\n {}/{}".format("50", "80"),justify="right", command=self.attack1)
+        #format(Game.Game.Player_1.Attack1.Damage, Game.Game.Player_1.Attack1.Hit_chance)
+        self.Player1_Button1.grid(row=6, column=0, columnspan=2, rowspan=1)
 
-        self.Player1_Button2 = tkinter.Button(self.Game_window, text="attack_2", command=self.attack2)
+        self.Player1_Button2 = tkinter.Button(self.Game_window, text="attack_2\n {}/{}".format("50", "80"),justify="right", command=self.attack2)
         self.Player1_Button2.grid(row=6, column=2, columnspan=2)
 
-        self.Player1_Button3 = tkinter.Button(self.Game_window, text="attack_3", command=self.attack3)
+        self.Player1_Button3 = tkinter.Button(self.Game_window, text="attack_3\n {}/{}".format("50", "80"),justify="right", command=self.attack3)
         self.Player1_Button3.grid(row=7, column=0, columnspan=2)
 
-        self.Player1_Button4 = tkinter.Button(self.Game_window, text="attack_4", command=self.attack4)
+        self.Player1_Button4 = tkinter.Button(self.Game_window, text="attack_4\n {}/{}".format("50", "80"),justify="right", command=self.attack4)
         self.Player1_Button4.grid(row=7, column=2, columnspan=2)
 
 
         # creating the buttons for player 2
         # player 2 is at the top of the screen
-        self.Player2_Button1 = tkinter.Button(self.Game_window, text="attack_1", command=self.attack5)
+        self.Player2_Button1 = tkinter.Button(self.Game_window, text="attack_1\n {}/{}".format("50", "80"),justify="right", command=self.attack5)
         self.Player2_Button1.grid(row=0, column=0, columnspan=2)
 
-        self.Player2_Button2 = tkinter.Button(self.Game_window, text="attack_2", command=self.attack6)
+        self.Player2_Button2 = tkinter.Button(self.Game_window, text="attack_2\n {}/{}".format("50", "80"),justify="right", command=self.attack6)
         self.Player2_Button2.grid(row=0, column=2, columnspan=2)
 
-        self.Player2_Button3 = tkinter.Button(self.Game_window, text="attack_3", command=self.attack7)
+        self.Player2_Button3 = tkinter.Button(self.Game_window, text="attack_3\n {}/{}".format("50", "80"),justify="right", command=self.attack7)
         self.Player2_Button3.grid(row=1, column=0, columnspan=2)
 
-        self.Player2_Button4 = tkinter.Button(self.Game_window, text="attack_4", command=self.attack8)
+        self.Player2_Button4 = tkinter.Button(self.Game_window, text="attack_4\n {}/{}".format("50", "80"),justify="right", command=self.attack8)
         self.Player2_Button4.grid(row=1, column=2, columnspan=2)
 
 
@@ -96,7 +98,29 @@ class GUI():
         self.Menu.add_cascade(label="Game", menu=self.Game_menu)
         self.Game_menu.add_command(label="Quit", command=self.quit)
         self.Game_menu.add_command(label="New game", command=self.new_game)
+        self.Game_menu.add_command(label="Help", command=self.help)
 
+
+    def start_new_game(self, player1, player2):
+        ''' starts a new game '''
+        # create a new game
+        self.Game = Game.Game()
+        self.Player_1 = player1
+        self.Player_2 = player2
+        # start with player 1 turn
+        self.Player_1.idle()
+
+
+    def make_attack(self, selected_attack):
+        ''' makes an attack and concludes a player turn '''
+        # TODO
+        pass
+
+
+    def end_game(self):
+        ''' ends the game '''
+        # TODO
+        pass
 
     # but why?
     def draw_game_picture(self):
@@ -144,13 +168,14 @@ class GUI():
         # TODO
         pass
 
-    def new_game(self):
-        # TODO
+    def help(self):
+        #TODO
         pass
 
     def deal_damage(self):
         self.Player1_Health -= 50
         self.Player1_Health_Bar["value"] = self.Player1_Health
+
 
 
 
