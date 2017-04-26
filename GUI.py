@@ -2,6 +2,7 @@
 import tkinter
 from tkinter import ttk
 import Game
+import Player
 
 root = tkinter.Tk()
 # TODO GET A NAME
@@ -100,6 +101,27 @@ class GUI():
         self.Game_menu.add_command(label="Help", command=self.help)
 
 
+    def start_new_game(self, player1, player2):
+        ''' starts a new game '''
+        # create a new game
+        self.Game = Game.Game()
+        self.Player_1 = player1
+        self.Player_2 = player2
+        # start with player 1 turn
+        self.Player_1.idle()
+
+
+    def make_attack(self, selected_attack):
+        ''' makes an attack and concludes a player turn '''
+        # TODO
+        pass
+
+
+    def end_game(self):
+        ''' ends the game '''
+        # TODO
+        pass
+
     # but why?
     def draw_game_picture(self):
         '''draws the image of the game'''
@@ -143,10 +165,6 @@ class GUI():
         pass
 
     def quit(self):
-        # TODO
-        pass
-
-    def new_game(self):
         # TODO
         pass
 

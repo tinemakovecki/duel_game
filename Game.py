@@ -1,6 +1,6 @@
 ### GAME LOGIC FILE
 import random
-import Class.py as Class # TODO put the file in the right place
+import Class # TODO put the file in the right place
 
 class Game():
     def __init__(self):
@@ -93,7 +93,7 @@ class Game():
 
 
 def check_hit(Selected_attack, Attacker_mods):
-    ''' decies if an attack will hit '''
+    ''' decies if an attack will hit, returns True/False '''
     Hit_chance = Selected_attack.Hit_chance
     for modifier in Attacker_mods # percent scaling?
         Hit_chance += modifier[2]
@@ -104,7 +104,7 @@ def check_hit(Selected_attack, Attacker_mods):
         return False
 
 def calculate_damage(Selected_attack, Attacker_mods):
-    ''' calculates the damage an attack deals '''
+    ''' returns the damage an attack deals '''
     Damage_dealt = Selected_attack.Damage
     for modifier in Attacker_mods:
         Damage_dealt += modifier[1]
