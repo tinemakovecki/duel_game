@@ -23,8 +23,9 @@ class Attack():
         '''return modifier effect on hit chance'''
         return self.Modifier[2]
 
-    def Modifier_target(self):
-        '''return which player the modifier affects'''
+    def target_opponent(self):
+        '''checks if the modifier affects the opponent'''
+        # if it doesn't target the opponent it's modifies the active player
         return self.Modifier[3]
 
 # MONSTER CLASS
@@ -36,6 +37,7 @@ class Monster():
         self.Attack2 = Attack2
         self.Attack3 = Attack3
         self.Attack4 = Attack4
+        self.Active_modifiers = []
 
 # CONSTRUCTION FUNCTIONS
 def createChar():

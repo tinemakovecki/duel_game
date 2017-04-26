@@ -1,131 +1,112 @@
 ### GAME LOGIC FILE
-# TODO just remake this shit
 import random
-
-Player_1 = "1"
-Player_2 = "2"
-Not_over = "game isn't over"
-
+import Class.py as Class # TODO put the file in the right place
 
 class Game():
     def __init__(self):
-        # players are the same monster for now
-        self.Player_1 = Monster('Pik')
-        self.Player_2 = Monster('Char')
-        self.Active_modifiers1 = {} # (modifier, turn started) # TODO check if modifier is over each turn
-        self.Active_modifiers2 = {}
-        # saving player character data somewhere else?
+        # TODO add monster choice option
+        self.Player1 = Class.createChar()
+        self.Player2 = Class.createPika()
 
-        self.Current_player = Player_1
+        self.Current_player = self.Player1
+        self.Turn_number = 1
         self.Game_active = True
-        self.Turn_number = 0
+        self.Winner = 'undefined' # change to None?
 
-    def copy(self):
-        '''returns a game copy'''
-        ## TODO for minmax
-        pass
+
+    def return_opponent(self):
+        ''' returns the opponent of the current player '''
+        if self.Current_player == self.Player1:
+            return self.Player2
+        elif self.Current_player == self.Player2:
+            return self.Player1
+        else:
+            assert False, "invalid opponent"
+        # TODO - better done with tags?
+
 
     def take_turn(self, Selected_attack):
-        '''does one game turn'''
-        # miss/hit -> deal damage -> check game state -> next turn
-        # TODO unified attack names for reference
-        self.Turn_number += 1
-        self.update_modifiers()
+        ''' completes a single game turn '''
+        Attacker_mods = self.Current_player.Active_modifiers
+        Defender_mods = self.return_opponent().Active_modifiers
+        Hit_check = check_hit(Selected_attack, Attacker_mods)
 
-        # checking hit/miss
-        Chance = Selected_attack[1] #   TODO better name for chance
-        Hit = hit_check(Chance, self.Active_modifiers)
+        # if the attack hits move on to the effects
+        if Hit_check == True:
+            Damage_dealt = calculate_damage(Selected_attack, Attacker_mods)
+            self.return_opponent().HP -= Damage_dealt
+            # a modifier activates sometimes, half the time for now
+            if random.random() > 1/2:
+                New_mod = (value for value in Selected_attack.Modifier)
+                if New_mod[3] == True: # check if modifier targets opponent
+                    Defender_mods.append((self.Turn_number, New_mod))
+                else:
+                    Attacker_mods.append((self.Turn_number, New_mod))
 
-        # dealing damage
-        if Hit == True:
-            Damage = calculate_damage(Selected_attack, self.Active_modifiers)
-            self.Opponent(self.Current_player).HP -= Damage
+        # game state update/check if game over
+        self.check_game_state()
+        if self.Game_active == False:
+            return self.Winner
 
-        # activating new modifiers
-        if random.random() < 0.3:
-            Modifier_try = Player_1.Modifiers[self.Current_player[Selected_attack[2]]] #recimo, da je tut selected_attack samo ime!
-            if self.Opponent(self.Current_player) == self.Player1:
-                if Selected_attack[2][2] == "opponent":
-                    self.Active_modifiers1[Selected_attack[2]] #TODO finish <- this
-                elif Selected_attack[2][2] == "self":
-                    self.Active_modifiers2[Selected_attack[2]]
-            else:
-                self.Active_modifiers1
-                self.Active_modifiers2
-
-
-        # checks the game state
-        Winner = self.check_game_state()
-        if self.Game_active == True:
-            self.Current_player = self.Opponent(self.Current_player)
-            return "Not over"
+        # if game isn't over, update objects and move on to next turn
         else:
-            self.Current_player = None
-            return Winner
+            self.Turn_number += 1
+            self.update_modifiers()
+            self.Current_player = self.return_opponent()
+            return
 
 
     def check_game_state(self):
-        '''describes game state, possible game over'''
-        # check if HP > 0, if not -> self.Game_active = False
-        if self.Opponent(self.Current_player).HP <= 0:
+        ''' checks if game continues/selects winner '''
+        if self.return_opponent().HP <= 0:
             self.Game_active = False
-            return self.Current_player # return not self.player but player?!
-        return "Not over"
-        # TODO better names?
+            # find the winner
+            if self.Current_player == self.Player1:
+                self.Winner = 'Player 1'
+            else:
+                self.Winner = 'Player 2'
+        return
 
-    def Opponent(self, player): # TODO: CHECK PLAYER_1 PLAYER2 ... MIX UP!!!!!!!!!!!!!!!!!!!!!!!!!
-        '''returns the opponent of the current player'''
-        if player == self.Player_1:
-            return self.Player_2
-        elif player == self.Player_2:
-            return self.Player_1
-        else:
-            assert False, "invalid opponent"
 
     def update_modifiers(self):
-        '''checks active modifiers and removes expired ones'''
-        for mod in self.Active_modifiers1:
-            if self.Turn_number - mod[1] < 3:
-                del self.Active_modifiers1[mod]
+        ''' updates list of active modifiers for both players '''
+        # update current player modifiers
+        for modifier in self.Current_player.Active_modifiers:
+            Updated_mods = []
+            if self.Turn_number - modifier[0] <= 6:
+                Updated_mods.append(modifier)
+        self.Current_player.Active_modifiers = Updated_mods
 
-        for mod in self.Active_modifiers2:
-            if self.Turn_number - mod[1] < 3:
-                del self.Active_modifiers2
+        # update opponent modifiers
+        for modifier in self.Current_player.Active_modifiers:
+            Updated_mods = []
+            if self.Turn_number - modifier[0] <= 6:
+                Updated_mods.append(modifier)
+        self.Current_player.Active_modifiers = Updated_mods
 
-
-def hit_check(player, attack_chance, modifiers): # TODO attack as paramaeter instead of attack chance?
-    '''checks if an attack hits or misses'''
-    if len(modifiers) == 0:
-        modifier_effect = 1
-    hit_chance = attack_chance * modifier_effect / 100
-    return random.random() < hit_chance
-
-# TODO calculate modifier effect
-def calculate_damage(attack_damage, modifiers):
-    '''calculates the damage of an attack'''
-    if len(modifiers) == 0:
-        modifier_effect = 1
-    damage_dealt = attack_damage * modifier_effect
-    return damage_dealt
+        return
 
 
-#### MONSTER CLASS - WILL BE IN OWN FILE
-# TODO DELETE
-# TODO connect class and game file
+    def copy(self):
+        # TODO for minmax
+        pass
 
-class Monster():
-    def __init__(self, Name):
-        self.Name = Name
-        self.HP = 10000
-        # TODO attack names
-        self.attack1 = (50, 50, "knockdown")
-        self.attack2 = (20, 80, "blind")
-        self.attack3 = (90, 5, "focus")
-        self.attack4 = (10, 90, "berserk")
 
-        # TODO modifiers
-        # meaning: knockdown(accuracy: -10, damage: -5)
-        # percent accuracy/damage reduction?
-        self.modifiers = {"knockdown": (-10, -5, "opponent"), "blind":(-20, 0, "opponent"), "focus":(10, 0, "self"), "berserk":(-10, 10, "both")}
+def check_hit(Selected_attack, Attacker_mods):
+    ''' decies if an attack will hit '''
+    Hit_chance = Selected_attack.Hit_chance
+    for modifier in Attacker_mods # percent scaling?
+        Hit_chance += modifier[2]
 
-Pikachu = Monster('Pikachu')
+    if Hit_chance / 100 > random.random():
+        return True
+    else:
+        return False
+
+def calculate_damage(Selected_attack, Attacker_mods):
+    ''' calculates the damage an attack deals '''
+    Damage_dealt = Selected_attack.Damage
+    for modifier in Attacker_mods:
+        Damage_dealt += modifier[1]
+
+    return Damage_dealt
