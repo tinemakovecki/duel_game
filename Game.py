@@ -43,6 +43,7 @@ class Game():
                 else:
                     Attacker_mods.append((self.Turn_number, New_mod))
 
+
         # game state update/check if game over
         self.check_game_state()
         if self.Game_active == False:

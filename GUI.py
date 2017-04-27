@@ -25,7 +25,7 @@ class GUI():
         # creating the buttons for player 1
         # player 1 is at the bottom of the screen
         self.Player1_Button1 = tkinter.Button(self.Game_window, text="attack_1\n {}/{}".format("55", "70"),justify="right", command=self.attack1)
-        # format(Game.Game.Player_1.Attack1.Damage, Game.Game.Player_1.Attack1.Hit_chance)
+        # format(Game.Game.Player1.Attack1.Damage, Game.Game.Player1.Attack1.Hit_chance)
         self.Player1_Button1.grid(row=6, column=0, columnspan=2, rowspan=1)
 
         self.Player1_Button2 = tkinter.Button(self.Game_window, text="attack_2\n {}/{}".format("50", "80"),justify="right", command=self.attack2)
@@ -63,6 +63,10 @@ class GUI():
                                                   value=500)
         self.Player2_Health_Bar.grid(row=2, column=1, columnspan=2)
         self.Player2_Health = 500
+
+        #creating the caption about game state
+        self.caption = tkinter.StringVar(master, value="Welcome!")
+        tkinter.Label(master, textvariable=self.caption).pack()
 
 
         # creating the game image
@@ -115,8 +119,8 @@ class GUI():
             self.deal_damage(self.Game.Current_player, damage_dealt)
              # deals the damage to the current player, because current player switched after self.Game.take_turn ended
 
-        elif winner == 'undefined':
-            pass
+        elif winner == 'undefined' and hit_check == False:
+            self.caption.set("Missed! {}'s turn.".format(self.Game.Current_player.Name))
 
         else:
             self.deal_damage(self.Game.return_opponent(), self.Game.return_opponent().HP)
@@ -126,6 +130,7 @@ class GUI():
     def end_game(self):
         ''' ends the game '''
         self.Game_picture.create_text(200, 150, font=("Purisa", 20), text='GAME OVER')
+        self.caption.set("Game Over!")
 
     # but why?
     def draw_game_picture(self):
@@ -171,10 +176,11 @@ class GUI():
         if Victim == self.Game.Player1:
             self.Player1_Health -= Damage_dealt
             self.Player1_Health_Bar["value"] = self.Player1_Health
+            self.caption.set("{} suffers {} damage. {}'s turn".format(Victim.Name, Damage_dealt, self.Game.Player2.Name))
         elif Victim == self.Game.Player2:
             self.Player2_Health -= Damage_dealt
             self.Player2_Health_Bar["value"] = self.Player2_Health
-
+            self.caption.set("{} suffers {} damage. {}'s turn".format(Victim.Name, Damage_dealt, self.Game.Player1.Name))
 
 
 

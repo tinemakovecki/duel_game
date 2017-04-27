@@ -51,7 +51,7 @@ def createChar():
     Attack4 = Attack('Bite', 60, 60, ('Frenzy', 10, 0, False))
 
     # monster = (name, HP, attack1, attack2, attack3, attack4)
-    Char = Monster('charmander', 500, Attack1, Attack2, Attack3, Attack4)
+    Char = Monster('Charmander', 500, Attack1, Attack2, Attack3, Attack4)
 
     return Char
 
@@ -67,7 +67,7 @@ def createPika():
     Attack4 = Attack('Paralyze', 20, 80, ('Paralysis', -10, -25, True))
 
     # monster = (name, HP, attack1, attack2, attack3, attack4)
-    Pika = Monster('pikachu', 500, Attack1, Attack2, Attack3, Attack4)
+    Pika = Monster('Pikachu', 500, Attack1, Attack2, Attack3, Attack4)
 
     return Pika
 
