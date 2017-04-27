@@ -26,19 +26,19 @@ class Game():
 
 
     def take_turn(self, Selected_attack):
-        ''' completes a single game turn '''
+        ''' completes a single game turn, returns pair (winner, damage dealt) '''
         Attacker_mods = self.Current_player.Active_modifiers
         Defender_mods = self.return_opponent().Active_modifiers
-        Hit_check = check_hit(Selected_attack, Attacker_mods)
+        Hit_check = check_hit(Selected_attack, Attacker_mods) # TODO BUG: almost never misses?
+        Damage_dealt = calculate_damage(Selected_attack, Attacker_mods)
 
         # if the attack hits move on to the effects
         if Hit_check == True:
-            Damage_dealt = calculate_damage(Selected_attack, Attacker_mods)
             self.return_opponent().HP -= Damage_dealt
             # a modifier activates sometimes, half the time for now
             if random.random() > 1/2:
-                New_mod = (value for value in Selected_attack.Modifier)
-                if New_mod[3] == True: # check if modifier targets opponent
+                New_mod = Selected_attack.Modifier # direct call instead of constructor, MIGHT EDIT ORIGINAL!?
+                if Selected_attack.Modifier[3] == True: # check if modifier targets opponent
                     Defender_mods.append((self.Turn_number, New_mod))
                 else:
                     Attacker_mods.append((self.Turn_number, New_mod))
@@ -46,14 +46,14 @@ class Game():
         # game state update/check if game over
         self.check_game_state()
         if self.Game_active == False:
-            return self.Winner
+            return (self.Winner, Hit_check, Damage_dealt)
 
         # if game isn't over, update objects and move on to next turn
         else:
             self.Turn_number += 1
             self.update_modifiers()
             self.Current_player = self.return_opponent()
-            return
+            return (self.Winner, Hit_check, Damage_dealt)
 
 
     def check_game_state(self):
@@ -71,15 +71,15 @@ class Game():
     def update_modifiers(self):
         ''' updates list of active modifiers for both players '''
         # update current player modifiers
+        Updated_mods = []
         for modifier in self.Current_player.Active_modifiers:
-            Updated_mods = []
             if self.Turn_number - modifier[0] <= 6:
                 Updated_mods.append(modifier)
         self.Current_player.Active_modifiers = Updated_mods
 
         # update opponent modifiers
+        Updated_mods = []
         for modifier in self.Current_player.Active_modifiers:
-            Updated_mods = []
             if self.Turn_number - modifier[0] <= 6:
                 Updated_mods.append(modifier)
         self.Current_player.Active_modifiers = Updated_mods
@@ -95,8 +95,8 @@ class Game():
 def check_hit(Selected_attack, Attacker_mods):
     ''' decies if an attack will hit, returns True/False '''
     Hit_chance = Selected_attack.Hit_chance
-    for modifier in Attacker_mods # percent scaling?
-        Hit_chance += modifier[2]
+    for modifier in Attacker_mods: # percent scaling?
+        Hit_chance += modifier[1][2]
 
     if Hit_chance / 100 > random.random():
         return True
@@ -107,6 +107,6 @@ def calculate_damage(Selected_attack, Attacker_mods):
     ''' returns the damage an attack deals '''
     Damage_dealt = Selected_attack.Damage
     for modifier in Attacker_mods:
-        Damage_dealt += modifier[1]
+        Damage_dealt += modifier[1][1]
 
     return Damage_dealt
