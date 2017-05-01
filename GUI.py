@@ -32,19 +32,6 @@ class GUI():
         # TODO add restart
         self.Game_options_menu.add_command(label = "Help", command = self.help)
 
-        # main menu
-        #self.Main_menu = tkinter.Menu(master)
-        #master.config(menu=self.Main_menu)
-
-        # submenu for game options
-        #self.Game_options_menu = tkinter.Menu(self.Main_menu)
-        #self.Main_menu.add_cascade(label="Game", menu=self.Game_options_menu)
-        # adding commands
-        #self.Game_options_menu.add_command(label="Quit", command=self.quit())
-        #self.Game_options_menu.add_command(label = "New game",
-        #                           command = self.start_new_game(Player.Human(self), Player.Human(self)))
-        #self.Game_options_menu.add_command(label = "Help", command = self.help())
-
 
         # buttons
         # TODO make button text take info from actual attacks
