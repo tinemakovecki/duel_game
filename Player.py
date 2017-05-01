@@ -4,7 +4,7 @@ class Human():
     def __init__(self, gui):
         self.Gui = gui
 
-    def idle(self):
+    def play(self):
         ''' idles and waits '''
         pass
 

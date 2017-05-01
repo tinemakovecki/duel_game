@@ -5,8 +5,8 @@ import Class # TODO put the file in the right place
 class Game():
     def __init__(self):
         # TODO add monster choice option
-        self.Player1 = Class.createChar()
-        self.Player2 = Class.createPika()
+        self.Player1 = Class.createPika()
+        self.Player2 = Class.createChar()
 
         self.Current_player = self.Player1
         self.Turn_number = 1
@@ -43,18 +43,25 @@ class Game():
                 else:
                     Attacker_mods.append((self.Turn_number, New_mod))
 
+        # defines which player played the turn
+        # change into Bool?
+        if self.Current_player == self.Player1:
+            active_player = 'Player 1'
+        elif self.Current_player == self.Player2:
+            active_player = 'Player 2'
 
         # game state update/check if game over
         self.check_game_state()
         if self.Game_active == False:
-            return (self.Winner, Hit_check, Damage_dealt)
+            return (active_player, Hit_check, Damage_dealt)
 
         # if game isn't over, update objects and move on to next turn
         else:
             self.Turn_number += 1
             self.update_modifiers()
             self.Current_player = self.return_opponent()
-            return (self.Winner, Hit_check, Damage_dealt)
+            return (active_player, Hit_check, Damage_dealt)
+        # TODO unify capitalization
 
 
     def check_game_state(self):

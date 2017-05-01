@@ -1,190 +1,222 @@
-### THE USER INTERFACE
+####### - MAIN GAME FILE & USER INTERFACE - #######
+
 import tkinter
 from tkinter import ttk
 import Game
 import Player
 
 root = tkinter.Tk()
-# TODO GET A NAME
 root.title("Duel Game")
 
 class GUI():
 
-    # selecting window size by hand:
-    # TODO flexible window
+    # TODO select/stretchable
     Window_height = 300
     Window_width = 200
 
     def __init__(self, master):
-        # creating the game window
-        self.Game_window = tkinter.Frame(master, width=GUI.Window_width, height=GUI.Window_height)
+        # window
+        self.Game_window = tkinter.Frame(master, width = GUI.Window_width, height = GUI.Window_height)
         self.Game_window.pack()
 
-
-        # TODO nicer buttons
-        # creating the buttons for player 1
-        # player 1 is at the bottom of the screen
-        self.Player1_Button1 = tkinter.Button(self.Game_window, text="attack_1\n {}/{}".format("55", "70"),justify="right", command=self.attack1)
-        # format(Game.Game.Player1.Attack1.Damage, Game.Game.Player1.Attack1.Hit_chance)
-        self.Player1_Button1.grid(row=6, column=0, columnspan=2, rowspan=1)
-
-        self.Player1_Button2 = tkinter.Button(self.Game_window, text="attack_2\n {}/{}".format("50", "80"),justify="right", command=self.attack2)
-        self.Player1_Button2.grid(row=6, column=2, columnspan=2)
-
-        self.Player1_Button3 = tkinter.Button(self.Game_window, text="attack_3\n {}/{}".format("45", "70"),justify="right", command=self.attack3)
-        self.Player1_Button3.grid(row=7, column=0, columnspan=2)
-
-        self.Player1_Button4 = tkinter.Button(self.Game_window, text="attack_4\n {}/{}".format("60", "60"),justify="right", command=self.attack4)
-        self.Player1_Button4.grid(row=7, column=2, columnspan=2)
-
-
-        # creating the buttons for player 2
-        # player 2 is at the top of the screen
-        self.Player2_Button1 = tkinter.Button(self.Game_window, text="attack_1\n {}/{}".format("70", "60"),justify="right", command=self.attack5)
-        self.Player2_Button1.grid(row=0, column=0, columnspan=2)
-
-        self.Player2_Button2 = tkinter.Button(self.Game_window, text="attack_2\n {}/{}".format("50", "80"),justify="right", command=self.attack6)
-        self.Player2_Button2.grid(row=0, column=2, columnspan=2)
-
-        self.Player2_Button3 = tkinter.Button(self.Game_window, text="attack_3\n {}/{}".format("50", "67"),justify="right", command=self.attack7)
-        self.Player2_Button3.grid(row=1, column=0, columnspan=2)
-
-        self.Player2_Button4 = tkinter.Button(self.Game_window, text="attack_4\n {}/{}".format("20", "80"),justify="right", command=self.attack8)
-        self.Player2_Button4.grid(row=1, column=2, columnspan=2)
-
-
-        # creating the health bars
-        self.Player1_Health_Bar = ttk.Progressbar(self.Game_window, orient="horizontal", length=200, maximum=1000,
-                                                  value=1000)
-        self.Player1_Health_Bar.grid(row=5, column=1, columnspan=2)
-        self.Player1_Health = 500
-
-        self.Player2_Health_Bar = ttk.Progressbar(self.Game_window, orient="horizontal", length=200, maximum=500,
-                                                  value=500)
-        self.Player2_Health_Bar.grid(row=2, column=1, columnspan=2)
-        self.Player2_Health = 500
-
-        #creating the caption about game state
-        self.caption = tkinter.StringVar(master, value="Welcome!")
-        tkinter.Label(master, textvariable=self.caption).pack()
-
-
-        # creating the game image
-        self.Game_picture = tkinter.Canvas(self.Game_window, background='white')
-        self.Game_picture.grid(row=3, rowspan=2, column=0, columnspan=4)
-        self.draw_game_picture() # have to put all image drawng in one function
-
-        # setting background
-        # TODO fitting background to canvas
-        self.Background = tkinter.PhotoImage(file='background.png')
-        self.Background_image = self.Game_picture.create_image(200, 200, image=self.Background)
-
-        # inserting sprites
-        self.Player1_sprite = tkinter.PhotoImage(file='Pikachu.png')
-        self.Player1_sprite_image = self.Game_picture.create_image(GUI.Window_width, GUI.Window_height * 3 // 4,
-                                                                   image=self.Player1_sprite)
-
-        self.Player2_sprite = tkinter.PhotoImage(file='Charmander.png')
-        self.Player2_sprite_image = self.Game_picture.create_image(GUI.Window_width, GUI.Window_height // 4,
-                                                                   image=self.Player2_sprite)
-
-        # TODO game menu
         # Main menu
-        self.Menu = tkinter.Menu(master)
-        master.config(menu=self.Menu)
+        self.Main_menu = tkinter.Menu(master)
+        master.config(menu=self.Main_menu)
 
         # Submenu
-        self.Game_menu = tkinter.Menu(self.Menu)
-        self.Menu.add_cascade(label="Game", menu=self.Game_menu)
-        self.Game_menu.add_command(label="Quit", command=self.quit)
-        self.Game_menu.add_command(label="New game", command=self.start_new_game(Player.Human(self), Player.Human(self)))
+        self.Game_options_menu = tkinter.Menu(self.Main_menu)
+        self.Main_menu.add_cascade(label = "Game", menu = self.Game_options_menu)
+        self.Game_options_menu.add_command(label = "Quit", command = self.quit)
+        self.Game_options_menu.add_command(label = "New game",
+                                           command = self.start_new_game(Player.Human(self), Player.Human(self)))
         # TODO add restart
-        self.Game_menu.add_command(label="Help", command=self.help)
+        self.Game_options_menu.add_command(label = "Help", command = self.help)
 
+        # main menu
+        #self.Main_menu = tkinter.Menu(master)
+        #master.config(menu=self.Main_menu)
+
+        # submenu for game options
+        #self.Game_options_menu = tkinter.Menu(self.Main_menu)
+        #self.Main_menu.add_cascade(label="Game", menu=self.Game_options_menu)
+        # adding commands
+        #self.Game_options_menu.add_command(label="Quit", command=self.quit())
+        #self.Game_options_menu.add_command(label = "New game",
+        #                           command = self.start_new_game(Player.Human(self), Player.Human(self)))
+        #self.Game_options_menu.add_command(label = "Help", command = self.help())
+
+
+        # buttons
+        # TODO make button text take info from actual attacks
+        # player 1 is at the bottom
+        self.Player1_button1 = tkinter.Button(self.Game_window, text = "attack_1\n {}/{}".format("55", "70"),
+                                              justify = "right", command = lambda: self.select_attack_for_player1(1))
+        self.Player1_button1.grid(row = 6, column = 0, columnspan = 2, rowspan = 1)
+
+        self.Player1_button2 = tkinter.Button(self.Game_window, text = "attack_2\n {}/{}".format("50", "80"),
+                                              justify = "right", command = lambda: self.select_attack_for_player1(2))
+        self.Player1_button2.grid(row = 6, column = 2, columnspan = 2)
+
+        self.Player1_button3 = tkinter.Button(self.Game_window, text = "attack_3\n {}/{}".format("45", "70"),
+                                              justify = "right", command = lambda: self.select_attack_for_player1(3))
+        self.Player1_button3.grid(row = 7, column = 0, columnspan = 2)
+
+        self.Player1_button4 = tkinter.Button(self.Game_window, text = "attack_4\n {}/{}".format("60", "60"),
+                                              justify = "right", command = lambda: self.select_attack_for_player1(4))
+        self.Player1_button4.grid(row = 7, column = 2, columnspan = 2)
+
+
+        # player 2 is at the top
+        self.Player2_button1 = tkinter.Button(self.Game_window, text = "attack_1\n {}/{}".format("70", "60"),
+                                              justify = "right", command = lambda: self.select_attack_for_player2(1))
+        self.Player2_button1.grid(row = 0, column = 0, columnspan = 2)
+
+        self.Player2_button2 = tkinter.Button(self.Game_window, text = "attack_2\n {}/{}".format("50", "80"),
+                                              justify = "right", command = lambda: self.select_attack_for_player2(2))
+        self.Player2_button2.grid(row = 0, column = 2, columnspan = 2)
+
+        self.Player2_button3 = tkinter.Button(self.Game_window, text = "attack_3\n {}/{}".format("50", "67"),
+                                              justify = "right", command = lambda: self.select_attack_for_player2(3))
+        self.Player2_button3.grid(row = 1, column = 0, columnspan = 2)
+
+        self.Player2_button4 = tkinter.Button(self.Game_window, text = "attack_4\n {}/{}".format("20", "80"),
+                                              justify = "right", command = lambda: self.select_attack_for_player2(4))
+        self.Player2_button4.grid(row = 1, column = 2, columnspan = 2)
+
+
+        # health bars
+        self.Player1_health_bar = ttk.Progressbar(self.Game_window, orient = "horizontal",
+                                                      length = 200, maximum = 500, value = 500)
+        self.Player1_health_bar.grid(row = 5, column = 1, columnspan = 2)
+        self.Player1_shown_health = 500 # TODO numvar?
+
+        self.Player2_health_bar = ttk.Progressbar(self.Game_window, orient = "horizontal",
+                                                      length = 200, maximum = 500, value = 500)
+        self.Player2_health_bar.grid(row=2, column=1, columnspan=2)
+        self.Player2_shown_health = 500 # TODO numvar?
+
+
+        # caption
+        self.Feedback_caption = tkinter.StringVar(master, value="Welcome!")
+        tkinter.Label(master, textvariable=self.Feedback_caption).pack()
+
+
+        # game image
+        self.Game_picture = tkinter.Canvas(self.Game_window, background = 'white')
+        self.Game_picture.grid(row = 3, rowspan = 2, column = 0, columnspan = 4)
+
+        # creating background
+        self.Background_image = tkinter.PhotoImage(file = 'background.png')
+        self.Background = self.Game_picture.create_image(200, 200, image = self.Background_image)
+
+        # creating sprites
+        # TODO import the right sprite when selecting monster
+        self.Player1_sprite_image = tkinter.PhotoImage(file = 'Pikachu.png')
+        self.Player1_sprite = self.Game_picture.create_image(GUI.Window_width, GUI.Window_height * 3 // 4,
+                                                             image = self.Player1_sprite_image)
+
+        self.Player2_sprite_image = tkinter.PhotoImage(file = 'Charmander.png')
+        self.Player2_sprite = self.Game_picture.create_image(GUI.Window_width, GUI.Window_height // 4,
+                                                             image = self.Player2_sprite_image)
+
+
+    ##### - GAME & GUI METHODS - #####
 
     def start_new_game(self, player1, player2):
-        ''' starts a new game '''
-        # create a new game
+        """ starts a new game """
         self.Game = Game.Game()
-        self.Player_1 = player1
-        self.Player_2 = player2
-        # start with player 1 turn
-        self.Player_1.idle()
+        self.Player1 = player1
+        self.Player2 = player2
+        # start with player 1
+        self.Player1.play()
 
 
     def make_attack(self, selected_attack):
-        ''' makes an attack and concludes a player turn '''
-        (winner, hit_check, damage_dealt) = self.Game.take_turn(selected_attack)
-        if winner == 'undefined' and hit_check == True:
-            self.deal_damage(self.Game.Current_player, damage_dealt)
-             # deals the damage to the current player, because current player switched after self.Game.take_turn ended
-
-        elif winner == 'undefined' and hit_check == False:
-            self.caption.set("Missed! {}'s turn.".format(self.Game.Current_player.Name))
-
+        """ makes an attack """
+        # TODO make Game.take_turn return the active player
+        # TODO remove winner from take_turn return
+        (active_player, hit_check, damage_dealt) = self.Game.take_turn(selected_attack)
+        # the game continues
+        if self.Game.Game_active == True:
+            self.show_turn_results(active_player, hit_check, damage_dealt)
+        # if the game is over
         else:
-            self.deal_damage(self.Game.return_opponent(), self.Game.return_opponent().HP)
+            self.show_turn_results(active_player, hit_check, damage_dealt)
             self.end_game()
 
 
     def end_game(self):
-        ''' ends the game '''
+        """ ends the game """
         self.Game_picture.create_text(200, 150, font=("Purisa", 20), text='GAME OVER')
-        self.caption.set("Game Over!")
+        self.Feedback_caption.set("Game Over!")
+        # TODO unbind the buttons / disable playing
 
-    # but why?
-    def draw_game_picture(self):
-        '''draws the image of the game'''
-        # TODO
-        # possible different images on attack/game modifiers
 
-    # functions called by the buttons
-    def attack1(self):
-        self.make_attack(self.Game.Player1.Attack1)
+    def show_turn_results(self, active_player, hit_check, damage_dealt): # # default value = zero?
+        """ updates the current state of the game in the GUI """
+        # first case if the attack landed
+        if hit_check == True:
+            if active_player == 'Player 1':
+                self.Player2_shown_health = self.Game.Player2.HP
+                self.Player2_health_bar["value"] = self.Player2_shown_health
+                self.Feedback_caption.set("{0} suffers {1} damage. {0}'s turn".format(self.Game.Player2.Name,
+                                                                                      damage_dealt))
+            elif active_player == 'Player 2':
+                self.Player1_shown_health = self.Game.Player1.HP
+                self.Player1_health_bar["value"] = self.Player1_shown_health
+                self.Feedback_caption.set("{0} suffers {1} damage. {0}'s turn".format(self.Game.Player1.Name,
+                                                                                      damage_dealt))
+            else:
+                # TODO error message
+                pass
+        # the attack missed
+        else:
+            self.Feedback_caption.set("Missed! {}'s turn.".format(self.Game.Current_player.Name))
 
-    def attack2(self):
-        self.make_attack(self.Game.Player1.Attack2)
+    ###  METHODS FOR ATTACK BUTTONS ###
 
-    def attack3(self):
-        self.make_attack(self.Game.Player1.Attack3)
+    def select_attack_for_player1(self, attack_number):
+        """ selects an attack for Player 1 after receiving the attack number """
+        if self.Game.Current_player == self.Game.Player1:
+            if attack_number == 1:
+                self.Player1.make_attack(self.Game.Player1.Attack1)
+            elif attack_number == 2:
+                self.Player1.make_attack(self.Game.Player1.Attack2)
+            elif attack_number == 3:
+                self.Player1.make_attack(self.Game.Player1.Attack3)
+            elif attack_number == 4:
+                self.Player1.make_attack(self.Game.Player1.Attack4)
+        else:
+            pass
+            # TODO print warning
 
-    def attack4(self):
-        self.make_attack(self.Game.Player1.Attack4)
 
-    def attack5(self):
-        self.make_attack(self.Game.Player2.Attack1)
+    def select_attack_for_player2(self, attack_number):
+        """ selects an attack for Player 2 after receiving the attack number """
+        if self.Game.Current_player == self.Game.Player2:
+            if attack_number == 1:
+                self.Player2.make_attack(self.Game.Player2.Attack1)
+            elif attack_number == 2:
+                self.Player2.make_attack(self.Game.Player2.Attack2)
+            elif attack_number == 3:
+                self.Player2.make_attack(self.Game.Player2.Attack3)
+            elif attack_number == 4:
+                self.Player2.make_attack(self.Game.Player2.Attack4)
+        else:
+            pass
+            # TODO print warning
 
-    def attack6(self):
-        self.make_attack(self.Game.Player2.Attack2)
-
-    def attack7(self):
-       self.make_attack(self.Game.Player2.Attack3)
-
-    def attack8(self):
-        self.make_attack(self.Game.Player2.Attack4)
+    ###  METHODS FOR GAME OPTIONS MENU ###
 
     def quit(self):
-        ''' closes the game window '''
+        """ closes the game window """
         root.destroy()
 
     def help(self):
-        #TODO
+        # TODO
         pass
 
-    def deal_damage(self, Victim, Damage_dealt):
-        ''' shows the damage dealt to a character in the health bar '''
-        if Victim == self.Game.Player1:
-            self.Player1_Health -= Damage_dealt
-            self.Player1_Health_Bar["value"] = self.Player1_Health
-            self.caption.set("{} suffers {} damage. {}'s turn".format(Victim.Name, Damage_dealt, self.Game.Player2.Name))
-        elif Victim == self.Game.Player2:
-            self.Player2_Health -= Damage_dealt
-            self.Player2_Health_Bar["value"] = self.Player2_Health
-            self.caption.set("{} suffers {} damage. {}'s turn".format(Victim.Name, Damage_dealt, self.Game.Player1.Name))
 
-
-
-# TODO window name,...
 app = GUI(root)
 
 root.mainloop()
