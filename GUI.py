@@ -16,7 +16,7 @@ class GUI():
 
     def __init__(self, master):
         # window
-        self.Game_window = tkinter.Frame(master, width = GUI.Window_width, height = GUI.Window_height)
+        self.Game_window = tkinter.Frame(master, width=GUI.Window_width, height=GUI.Window_height)
         self.Game_window.pack()
 
         # Main menu
@@ -25,60 +25,65 @@ class GUI():
 
         # Submenu
         self.Game_options_menu = tkinter.Menu(self.Main_menu)
-        self.Main_menu.add_cascade(label = "Game", menu = self.Game_options_menu)
-        self.Game_options_menu.add_command(label = "Quit", command = self.quit)
-        self.Game_options_menu.add_command(label = "New game",
-                                           command = self.start_new_game(Player.Human(self), Player.Human(self)))
+        self.Main_menu.add_cascade(label="Game", menu=self.Game_options_menu)
+        self.Game_options_menu.add_command(label="Quit", command=self.quit)
+        self.Game_options_menu.add_command(label="New game",
+                                           command=self.start_new_game(Player.Human(self), Player.Human(self)))
         # TODO add restart
-        self.Game_options_menu.add_command(label = "Help", command = self.help)
+        self.Game_options_menu.add_command(label="Help", command=self.help)
 
 
         # buttons
         # TODO make button text take info from actual attacks
         # player 1 is at the bottom
-        self.Player1_button1 = tkinter.Button(self.Game_window, text = "attack_1\n {}/{}".format("55", "70"),
-                                              justify = "right", command = lambda: self.select_attack_for_player1(1))
-        self.Player1_button1.grid(row = 6, column = 0, columnspan = 2, rowspan = 1)
+        self.Player1_button1 = tkinter.Button(self.Game_window,
+                                              text="attack_1\n {}/{}".format(
+                                                  self.Game.Player1.Attack1.Damage,
+                                                  self.Game.Player1.Attack1.Hit_chance),
+                                              justify="right", command=lambda: self.select_attack_for_player1(1))
+        self.Player1_button1.grid(row=6, column=0, columnspan=2, rowspan=1)
 
-        self.Player1_button2 = tkinter.Button(self.Game_window, text = "attack_2\n {}/{}".format("50", "80"),
-                                              justify = "right", command = lambda: self.select_attack_for_player1(2))
-        self.Player1_button2.grid(row = 6, column = 2, columnspan = 2)
+        self.Player1_button2 = tkinter.Button(self.Game_window, text="attack_2\n {}/{}".format("50", "80"),
+                                              justify="right", command=lambda: self.select_attack_for_player1(2))
+        self.Player1_button2.grid(row=6, column=2, columnspan=2)
 
-        self.Player1_button3 = tkinter.Button(self.Game_window, text = "attack_3\n {}/{}".format("45", "70"),
-                                              justify = "right", command = lambda: self.select_attack_for_player1(3))
-        self.Player1_button3.grid(row = 7, column = 0, columnspan = 2)
+        self.Player1_button3 = tkinter.Button(self.Game_window, text="attack_3\n {}/{}".format("45", "70"),
+                                              justify="right", command=lambda: self.select_attack_for_player1(3))
+        self.Player1_button3.grid(row=7, column=0, columnspan=2)
 
-        self.Player1_button4 = tkinter.Button(self.Game_window, text = "attack_4\n {}/{}".format("60", "60"),
-                                              justify = "right", command = lambda: self.select_attack_for_player1(4))
-        self.Player1_button4.grid(row = 7, column = 2, columnspan = 2)
+        self.Player1_button4 = tkinter.Button(self.Game_window, text="attack_4\n {}/{}".format("60", "60"),
+                                              justify="right", command=lambda: self.select_attack_for_player1(4))
+        self.Player1_button4.grid(row=7, column=2, columnspan=2)
 
 
         # player 2 is at the top
-        self.Player2_button1 = tkinter.Button(self.Game_window, text = "attack_1\n {}/{}".format("70", "60"),
-                                              justify = "right", command = lambda: self.select_attack_for_player2(1))
-        self.Player2_button1.grid(row = 0, column = 0, columnspan = 2)
+        self.Player2_button1 = tkinter.Button(self.Game_window, text="attack_1\n {}/{}".format("70", "60"),
+                                              justify="right", command=lambda: self.select_attack_for_player2(1))
+        self.Player2_button1.grid(row=0, column=0, columnspan=2)
 
-        self.Player2_button2 = tkinter.Button(self.Game_window, text = "attack_2\n {}/{}".format("50", "80"),
-                                              justify = "right", command = lambda: self.select_attack_for_player2(2))
-        self.Player2_button2.grid(row = 0, column = 2, columnspan = 2)
+        self.Player2_button2 = tkinter.Button(self.Game_window, text="attack_2\n {}/{}".format("50", "80"),
+                                              justify="right", command=lambda: self.select_attack_for_player2(2))
+        self.Player2_button2.grid(row=0, column=2, columnspan=2)
 
-        self.Player2_button3 = tkinter.Button(self.Game_window, text = "attack_3\n {}/{}".format("50", "67"),
-                                              justify = "right", command = lambda: self.select_attack_for_player2(3))
-        self.Player2_button3.grid(row = 1, column = 0, columnspan = 2)
+        self.Player2_button3 = tkinter.Button(self.Game_window, text="attack_3\n {}/{}".format("50", "67"),
+                                              justify="right", command=lambda: self.select_attack_for_player2(3))
+        self.Player2_button3.grid(row=1, column=0, columnspan=2)
 
-        self.Player2_button4 = tkinter.Button(self.Game_window, text = "attack_4\n {}/{}".format("20", "80"),
-                                              justify = "right", command = lambda: self.select_attack_for_player2(4))
-        self.Player2_button4.grid(row = 1, column = 2, columnspan = 2)
+        self.Player2_button4 = tkinter.Button(self.Game_window, text="attack_4\n {}/{}".format("20", "80"),
+                                              justify="right", command=lambda: self.select_attack_for_player2(4))
+        self.Player2_button4.grid(row=1, column=2, columnspan=2)
 
 
         # health bars
-        self.Player1_health_bar = ttk.Progressbar(self.Game_window, orient = "horizontal",
-                                                      length = 200, maximum = 500, value = 500)
-        self.Player1_health_bar.grid(row = 5, column = 1, columnspan = 2)
+        self.Player1_health_bar = ttk.Progressbar(self.Game_window,
+                                                  orient="horizontal", length=200,
+                                                  maximum=500, value=500)
+        self.Player1_health_bar.grid(row=5, column=1, columnspan=2)
         self.Player1_shown_health = 500 # TODO numvar?
 
-        self.Player2_health_bar = ttk.Progressbar(self.Game_window, orient = "horizontal",
-                                                      length = 200, maximum = 500, value = 500)
+        self.Player2_health_bar = ttk.Progressbar(self.Game_window,
+                                                  orient="horizontal", length=200,
+                                                  maximum=500, value=500)
         self.Player2_health_bar.grid(row=2, column=1, columnspan=2)
         self.Player2_shown_health = 500 # TODO numvar?
 
@@ -89,22 +94,24 @@ class GUI():
 
 
         # game image
-        self.Game_picture = tkinter.Canvas(self.Game_window, background = 'white')
-        self.Game_picture.grid(row = 3, rowspan = 2, column = 0, columnspan = 4)
+        self.Game_picture = tkinter.Canvas(self.Game_window, background='white')
+        self.Game_picture.grid(row=3, rowspan=2, column=0, columnspan=4)
 
         # creating background
-        self.Background_image = tkinter.PhotoImage(file = 'background.png')
-        self.Background = self.Game_picture.create_image(200, 200, image = self.Background_image)
+        self.Background_image=tkinter.PhotoImage(file='background.png')
+        self.Background = self.Game_picture.create_image(200, 200, image=self.Background_image)
 
         # creating sprites
         # TODO import the right sprite when selecting monster
-        self.Player1_sprite_image = tkinter.PhotoImage(file = 'Pikachu.png')
-        self.Player1_sprite = self.Game_picture.create_image(GUI.Window_width, GUI.Window_height * 3 // 4,
-                                                             image = self.Player1_sprite_image)
+        self.Player1_sprite_image=tkinter.PhotoImage(file='Pikachu.png')
+        self.Player1_sprite = self.Game_picture.create_image(GUI.Window_width,
+                                                             GUI.Window_height * 3 // 4,
+                                                             image=self.Player1_sprite_image)
 
-        self.Player2_sprite_image = tkinter.PhotoImage(file = 'Charmander.png')
-        self.Player2_sprite = self.Game_picture.create_image(GUI.Window_width, GUI.Window_height // 4,
-                                                             image = self.Player2_sprite_image)
+        self.Player2_sprite_image=tkinter.PhotoImage(file='Charmander.png')
+        self.Player2_sprite = self.Game_picture.create_image(GUI.Window_width,
+                                                             GUI.Window_height // 4,
+                                                             image=self.Player2_sprite_image)
 
 
     ##### - GAME & GUI METHODS - #####
@@ -139,7 +146,7 @@ class GUI():
         # TODO unbind the buttons / disable playing
 
 
-    def show_turn_results(self, active_player, hit_check, damage_dealt): # # default value = zero?
+    def show_turn_results(self, active_player, hit_check, damage_dealt): # # default value=zero?
         """ updates the current state of the game in the GUI """
         # first case if the attack landed
         if hit_check == True:
