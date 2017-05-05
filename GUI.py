@@ -8,16 +8,22 @@ import Player
 root = tkinter.Tk()
 root.title("Duel Game")
 
+# TODO select/stretchable
+WINDOW_HEIGHT = 300
+WINDOW_WIDTH = 200
+
 class GUI():
 
-    # TODO select/stretchable
-    Window_height = 300
-    Window_width = 200
 
     def __init__(self, master):
+        # not yet defined, just declared for __init__
+        self.Game = None
+        self.Player1 = None
+        self.Player2 = None
+
         # window
-        self.Game_window = tkinter.Frame(master, width=GUI.Window_width, height=GUI.Window_height)
-        self.Game_window.pack()
+        self.Game_window = tkinter.Frame(master, width=WINDOW_WIDTH, height=WINDOW_HEIGHT)
+        self.Game_window.grid(row=0, column=0)
 
         # Main menu
         self.Main_menu = tkinter.Menu(master)
@@ -96,21 +102,22 @@ class GUI():
 
         # health bars
         self.Player1_health_bar = ttk.Progressbar(self.Game_window,
-                                                  orient="horizontal", length=self.Window_width,
+                                                  orient="horizontal", length=WINDOW_WIDTH,
                                                   maximum=self.Game.Player1.HP, value=self.Game.Player1.HP)
         self.Player1_health_bar.grid(row=5, column=1, columnspan=2)
         self.Player1_shown_health = self.Game.Player1.HP # TODO numvar?
 
         self.Player2_health_bar = ttk.Progressbar(self.Game_window,
-                                                  orient="horizontal", length=self.Window_width,
+                                                  orient="horizontal", length=WINDOW_WIDTH,
                                                   maximum=self.Game.Player2.HP, value=self.Game.Player2.HP)
         self.Player2_health_bar.grid(row=2, column=1, columnspan=2)
         self.Player2_shown_health = self.Game.Player2.HP # TODO numvar?
 
 
         # caption
-        self.Feedback_caption = tkinter.StringVar(master, value="Welcome!")
-        tkinter.Label(master, textvariable=self.Feedback_caption).pack()
+        self.feedback_caption_text = tkinter.StringVar(self.Game_window, value="Welcome!")
+        self.feedback_caption = tkinter.Label(master, textvariable=self.feedback_caption_text)
+        self.feedback_caption.grid(row=8)
 
 
         # game image
@@ -118,20 +125,51 @@ class GUI():
         self.Game_picture.grid(row=3, rowspan=2, column=0, columnspan=4)
 
         # creating background
-        self.Background_image=tkinter.PhotoImage(file='background.png')
+        self.Background_image = tkinter.PhotoImage(file='background.png')
         self.Background = self.Game_picture.create_image(200, 200, image=self.Background_image)
 
         # creating sprites
-        self.Player1_sprite_image=tkinter.PhotoImage(file='{}.png'.format(self.Game.Player1.Name))
-        self.Player1_sprite = self.Game_picture.create_image(GUI.Window_width,
-                                                             GUI.Window_height * 3 // 4,
+        self.Player1_sprite_image = tkinter.PhotoImage(file='{}.png'.format(self.Game.Player1.Name))
+        self.Player1_sprite = self.Game_picture.create_image(WINDOW_WIDTH,
+                                                             WINDOW_HEIGHT * 3 // 4,
                                                              image=self.Player1_sprite_image)
 
         self.Player2_sprite_image=tkinter.PhotoImage(file='{}.png'.format(self.Game.Player2.Name))
-        self.Player2_sprite = self.Game_picture.create_image(GUI.Window_width,
-                                                             GUI.Window_height // 4,
+        self.Player2_sprite = self.Game_picture.create_image(WINDOW_WIDTH,
+                                                             WINDOW_HEIGHT // 4,
                                                              image=self.Player2_sprite_image)
 
+
+        # game over screen
+        self.restart_button = tkinter.Button(master,
+                                             text='Restart',
+                                             command=lambda: self.start_new_game(Player.Human(self),
+                                                                                 Player.Human(self)))
+        self.game_over_display = tkinter.Canvas(master,
+                                                width=WINDOW_WIDTH,
+                                                height=WINDOW_HEIGHT,
+                                                background='black')
+
+
+        # new game screen
+        self.new_game_button = tkinter.Button(master,
+                                              text='Start game',
+                                              command=lambda: self.start_new_game(Player.Human(self),
+                                                                                  Player.Human(self)))
+
+        self.new_game_display = tkinter.Canvas(master,
+                                               width=WINDOW_WIDTH,
+                                               height=WINDOW_HEIGHT,
+                                               background='black')
+
+        self.new_game_display.create_text(WINDOW_WIDTH / 2,
+                                          WINDOW_HEIGHT / 2,
+                                          font=("Purisa", 20),
+                                          fill='white',
+                                          text='WELCOME')
+
+        #self.new_game_display.grid(row=0)
+        #self.new_game_button.grid(row=1)
 
     ##### - GAME & GUI METHODS - #####
 
@@ -140,8 +178,15 @@ class GUI():
         self.Game = Game.Game()
         self.Player1 = player1
         self.Player2 = player2
+
+        # show the main game window
+        #self.Game_window.grid()
+        #self.feedback_caption.grid(row=8)
+        # TODO SET BUTTON NAMES HERE!!!!
+
         # start with player 1
         self.Player1.play()
+        # TODO add new frame before game start
 
 
     def make_attack(self, selected_attack):
@@ -160,9 +205,19 @@ class GUI():
 
     def end_game(self):
         """ ends the game """
-        self.Game_picture.create_text(200, 150, font=("Purisa", 20), text='GAME OVER')
-        self.Feedback_caption.set("Game Over!")
+        self.Game_window.grid_remove()
+        self.feedback_caption.grid_remove()
+        self.game_over_display.grid()
+        self.restart_button.grid()
+
+        self.game_over_display.create_text(WINDOW_WIDTH / 2,
+                                           WINDOW_HEIGHT / 2,
+                                           font=("Purisa", 20),
+                                           fill='white',
+                                           text='GAME OVER')
+        #self.Feedback_caption.set("Game Over!")
         # TODO unbind the buttons / disable playing
+        # self.Player = None
 
 
     def show_turn_results(self, active_player, hit_check, damage_dealt): # # default value=zero?
@@ -172,18 +227,18 @@ class GUI():
             if active_player == 'Player 1':
                 self.Player2_shown_health = self.Game.Player2.HP
                 self.Player2_health_bar["value"] = self.Player2_shown_health
-                self.Feedback_caption.set("{0} suffers {1} damage. {0}'s turn".format(self.Game.Player2.Name,
-                                                                                      damage_dealt))
+                self.feedback_caption_text.set("{0} suffers {1} damage. {0}'s turn".format(self.Game.Player2.Name,
+                                                                                           damage_dealt))
             elif active_player == 'Player 2':
                 self.Player1_shown_health = self.Game.Player1.HP
                 self.Player1_health_bar["value"] = self.Player1_shown_health
-                self.Feedback_caption.set("{0} suffers {1} damage. {0}'s turn".format(self.Game.Player1.Name,
-                                                                                      damage_dealt))
+                self.feedback_caption_text.set("{0} suffers {1} damage. {0}'s turn".format(self.Game.Player1.Name,
+                                                                                           damage_dealt))
             else:
                 assert False, "invalid player"
         # the attack missed
         else:
-            self.Feedback_caption.set("Missed! {}'s turn.".format(self.Game.Current_player.Name))
+            self.feedback_caption_text.set("Missed! {}'s turn.".format(self.Game.Current_player.Name))
 
     ###  METHODS FOR ATTACK BUTTONS ###
 
