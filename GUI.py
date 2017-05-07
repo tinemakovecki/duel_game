@@ -189,11 +189,9 @@ class GUI():
         # TODO add new frame before game start
 
 
-    def make_attack(self, selected_attack):
+    def make_attack(self, selected_attack, certain_hit=None):
         """ makes an attack """
-        # TODO make Game.take_turn return the active player
-        # TODO remove winner from take_turn return
-        (active_player, hit_check, damage_dealt) = self.Game.take_turn(selected_attack)
+        (active_player, hit_check, damage_dealt) = self.Game.take_turn(selected_attack, certain_hit)
         # the game continues
         if self.Game.Game_active == True:
             self.show_turn_results(active_player, hit_check, damage_dealt)

@@ -12,6 +12,26 @@ class Game():
         self.Turn_number = 1
         self.Game_active = True
         self.Winner = 'undefined' # change to None?
+        self.history = []
+
+
+    def save_state(self):
+        """ adds current state of the game to history """
+        # (turn number, current player, player 1, player 2)
+        # player 1 and player 2 contain data about active mods
+        # TODO
+        pass
+
+
+    def copy(self):
+        # TODO for minmax
+        pass
+
+
+    def reverse_move(self):
+        # history pop to assign new values -> put them into game variables
+        # TODO
+        pass
 
 
     def return_opponent(self):
@@ -25,23 +45,31 @@ class Game():
         # TODO - better done with tags?
 
 
-    def take_turn(self, Selected_attack):
+    def take_turn(self, selected_attack, certain_hit):
         ''' completes a single game turn, returns pair (winner, damage dealt) '''
-        Attacker_mods = self.Current_player.Active_modifiers
-        Defender_mods = self.return_opponent().Active_modifiers
-        Hit_check = check_hit(Selected_attack, Attacker_mods) # TODO BUG: almost never misses?
-        Damage_dealt = calculate_damage(Selected_attack, Attacker_mods)
+        attacker_mods = self.Current_player.Active_modifiers
+        defender_mods = self.return_opponent().Active_modifiers
+        damage_dealt = calculate_damage(selected_attack, attacker_mods)
+
+        # check if an attack hits
+        if certain_hit == None:
+            hit_check = check_hit(selected_attack, attacker_mods)
+        # options for certain hit/miss to use for computer player decisions
+        elif certain_hit == True:
+            hit_check = True
+        elif certain_hit == False:
+            hit_check = False
 
         # if the attack hits move on to the effects
-        if Hit_check == True:
-            self.return_opponent().HP -= Damage_dealt
+        if hit_check == True:
+            self.return_opponent().HP -= damage_dealt
             # a modifier activates sometimes, half the time for now
             if random.random() > 1/2:
-                New_mod = Selected_attack.Modifier # direct call instead of constructor, MIGHT EDIT ORIGINAL!?
-                if Selected_attack.Modifier[3] == True: # check if modifier targets opponent
-                    Defender_mods.append((self.Turn_number, New_mod))
+                new_mod = selected_attack.Modifier # direct call instead of constructor, MIGHT EDIT ORIGINAL!?
+                if selected_attack.Modifier[3] == True: # check if modifier targets opponent
+                    defender_mods.append((self.Turn_number, new_mod))
                 else:
-                    Attacker_mods.append((self.Turn_number, New_mod))
+                    attacker_mods.append((self.Turn_number, new_mod))
 
         # defines which player played the turn
         # change into Bool?
@@ -53,19 +81,19 @@ class Game():
         # game state update/check if game over
         self.check_game_state()
         if self.Game_active == False:
-            return (active_player, Hit_check, Damage_dealt)
+            return (active_player, hit_check, damage_dealt)
 
         # if game isn't over, update objects and move on to next turn
         else:
             self.Turn_number += 1
             self.update_modifiers()
             self.Current_player = self.return_opponent()
-            return (active_player, Hit_check, Damage_dealt)
+            return (active_player, hit_check, damage_dealt)
         # TODO unify capitalization
 
 
     def check_game_state(self):
-        ''' checks if game continues/selects winner '''
+        ''' checks if game continues/selects and return possible winner '''
         if self.return_opponent().HP <= 0:
             self.Game_active = False
             # find the winner
@@ -73,7 +101,7 @@ class Game():
                 self.Winner = 'Player 1'
             else:
                 self.Winner = 'Player 2'
-        return
+        return self.Winner
 
 
     def update_modifiers(self):
@@ -93,11 +121,6 @@ class Game():
         self.Current_player.Active_modifiers = Updated_mods
 
         return
-
-
-    def copy(self):
-        # TODO for minmax
-        pass
 
 
 def check_hit(Selected_attack, Attacker_mods):
