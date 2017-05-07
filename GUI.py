@@ -23,7 +23,7 @@ class GUI():
 
         # window
         self.Game_window = tkinter.Frame(master, width=WINDOW_WIDTH, height=WINDOW_HEIGHT)
-        self.Game_window.grid(row=0, column=0)
+        #self.Game_window.grid(row=0, column=0)
 
         # Main menu
         self.Main_menu = tkinter.Menu(master)
@@ -34,84 +34,78 @@ class GUI():
         self.Main_menu.add_cascade(label="Game", menu=self.Game_options_menu)
         self.Game_options_menu.add_command(label="Quit", command=self.quit)
         self.Game_options_menu.add_command(label="New game",
-                                           command=self.start_new_game(Player.Human(self), Player.Human(self)))
+                                           command=lambda: self.start_new_game(Player.Human(self), Player.Human(self)))
         # TODO add restart/change 'New Game'
         self.Game_options_menu.add_command(label="Help", command=self.help)
 
 
         # buttons
         # player 1 is at the bottom
+        self.player1_button1_text = tkinter.StringVar()
         self.Player1_button1 = tkinter.Button(self.Game_window,
-                                              text="attack_1\n {}/{}".format(
-                                                  self.Game.Player1.Attack1.Damage,
-                                                  self.Game.Player1.Attack1.Hit_chance),
-                                              justify="right", command=lambda: self.select_attack_for_player1(1))
+                                              textvariable=self.player1_button1_text,
+                                              justify="right",
+                                              command=lambda: self.select_attack_for_player1(1))
         self.Player1_button1.grid(row=6, column=0, columnspan=2, rowspan=1)
 
+        self.player1_button2_text = tkinter.StringVar()
         self.Player1_button2 = tkinter.Button(self.Game_window,
-                                              text="attack_2\n {}/{}".format(
-                                                  self.Game.Player1.Attack2.Damage,
-                                                  self.Game.Player1.Attack2.Hit_chance),
-                                              justify="right", command=lambda: self.select_attack_for_player1(2))
+                                              textvariable=self.player1_button2_text,
+                                              justify="right",
+                                              command=lambda: self.select_attack_for_player1(2))
         self.Player1_button2.grid(row=6, column=2, columnspan=2)
 
+        self.player1_button3_text = tkinter.StringVar()
         self.Player1_button3 = tkinter.Button(self.Game_window,
-                                              text="attack_3\n {}/{}".format(
-                                                  self.Game.Player1.Attack3.Damage,
-                                                  self.Game.Player1.Attack3.Hit_chance),
-                                              justify="right", command=lambda: self.select_attack_for_player1(3))
+                                              textvariable=self.player1_button3_text,
+                                              justify="right",
+                                              command=lambda: self.select_attack_for_player1(3))
         self.Player1_button3.grid(row=7, column=0, columnspan=2)
 
+        self.player1_button4_text = tkinter.StringVar()
         self.Player1_button4 = tkinter.Button(self.Game_window,
-                                              text="attack_4\n {}/{}".format(
-                                                  self.Game.Player1.Attack4.Damage,
-                                                  self.Game.Player1.Attack4.Hit_chance),
-                                              justify="right", command=lambda: self.select_attack_for_player1(4))
+                                              textvariable=self.player1_button4_text,
+                                              justify="right",
+                                              command=lambda: self.select_attack_for_player1(4))
         self.Player1_button4.grid(row=7, column=2, columnspan=2)
 
 
         # player 2 is at the top
+        self.player2_button1_text = tkinter.StringVar()
         self.Player2_button1 = tkinter.Button(self.Game_window,
-                                              text="attack_1\n {}/{}".format(
-                                                  self.Game.Player2.Attack1.Damage,
-                                                  self.Game.Player2.Attack1.Hit_chance),
-                                              justify="right", command=lambda: self.select_attack_for_player2(1))
+                                              textvariable=self.player2_button1_text,
+                                              justify="right",
+                                              command=lambda: self.select_attack_for_player2(1))
         self.Player2_button1.grid(row=0, column=0, columnspan=2)
 
+        self.player2_button2_text = tkinter.StringVar()
         self.Player2_button2 = tkinter.Button(self.Game_window,
-                                              text="attack_2\n {}/{}".format(
-                                                  self.Game.Player2.Attack2.Damage,
-                                                  self.Game.Player2.Attack2.Hit_chance),
-                                              justify="right", command=lambda: self.select_attack_for_player2(2))
+                                              textvariable=self.player2_button2_text,
+                                              justify="right",
+                                              command=lambda: self.select_attack_for_player2(2))
         self.Player2_button2.grid(row=0, column=2, columnspan=2)
 
+        self.player2_button3_text = tkinter.StringVar()
         self.Player2_button3 = tkinter.Button(self.Game_window,
-                                              text="attack_3\n {}/{}".format(
-                                                  self.Game.Player2.Attack3.Damage,
-                                                  self.Game.Player2.Attack3.Hit_chance),
-                                              justify="right", command=lambda: self.select_attack_for_player2(3))
+                                              textvariable=self.player2_button3_text,
+                                              justify="right",
+                                              command=lambda: self.select_attack_for_player2(3))
         self.Player2_button3.grid(row=1, column=0, columnspan=2)
 
+        self.player2_button4_text = tkinter.StringVar()
         self.Player2_button4 = tkinter.Button(self.Game_window,
-                                              text="attack_4\n {}/{}".format(
-                                                  self.Game.Player2.Attack4.Damage,
-                                                  self.Game.Player2.Attack4.Hit_chance),
-                                              justify="right", command=lambda: self.select_attack_for_player2(4))
+                                              textvariable=self.player2_button4_text,
+                                              justify="right",
+                                              command=lambda: self.select_attack_for_player2(4))
         self.Player2_button4.grid(row=1, column=2, columnspan=2)
 
 
-        # health bars
-        self.Player1_health_bar = ttk.Progressbar(self.Game_window,
-                                                  orient="horizontal", length=WINDOW_WIDTH,
-                                                  maximum=self.Game.Player1.HP, value=self.Game.Player1.HP)
-        self.Player1_health_bar.grid(row=5, column=1, columnspan=2)
-        self.Player1_shown_health = self.Game.Player1.HP # TODO numvar?
+        # declaring health bars, they are changed later
+        self.Player1_health_bar = None
+        self.Player1_shown_health = None
 
-        self.Player2_health_bar = ttk.Progressbar(self.Game_window,
-                                                  orient="horizontal", length=WINDOW_WIDTH,
-                                                  maximum=self.Game.Player2.HP, value=self.Game.Player2.HP)
-        self.Player2_health_bar.grid(row=2, column=1, columnspan=2)
-        self.Player2_shown_health = self.Game.Player2.HP # TODO numvar?
+        self.Player2_health_bar = None
+        self.Player2_shown_health = None
 
 
         # caption
@@ -129,15 +123,11 @@ class GUI():
         self.Background = self.Game_picture.create_image(200, 200, image=self.Background_image)
 
         # creating sprites
-        self.Player1_sprite_image = tkinter.PhotoImage(file='{}.png'.format(self.Game.Player1.Name))
-        self.Player1_sprite = self.Game_picture.create_image(WINDOW_WIDTH,
-                                                             WINDOW_HEIGHT * 3 // 4,
-                                                             image=self.Player1_sprite_image)
+        self.Player1_sprite_image = None
+        self.Player1_sprite = None
 
-        self.Player2_sprite_image=tkinter.PhotoImage(file='{}.png'.format(self.Game.Player2.Name))
-        self.Player2_sprite = self.Game_picture.create_image(WINDOW_WIDTH,
-                                                             WINDOW_HEIGHT // 4,
-                                                             image=self.Player2_sprite_image)
+        self.Player2_sprite_image = None
+        self.Player2_sprite = None
 
 
         # game over screen
@@ -168,8 +158,8 @@ class GUI():
                                           fill='white',
                                           text='WELCOME')
 
-        #self.new_game_display.grid(row=0)
-        #self.new_game_button.grid(row=1)
+        self.new_game_display.grid(row=0)
+        self.new_game_button.grid(row=1)
 
     ##### - GAME & GUI METHODS - #####
 
@@ -180,9 +170,56 @@ class GUI():
         self.Player2 = player2
 
         # show the main game window
-        #self.Game_window.grid()
-        #self.feedback_caption.grid(row=8)
-        # TODO SET BUTTON NAMES HERE!!!!
+        self.new_game_display.grid_remove()
+        self.new_game_button.grid_remove()
+        self.Game_window.grid(row=0)
+        self.feedback_caption.grid(row=8)
+
+        # changing the text on player 1 buttons
+        self.player1_button1_text.set("attack_1\n {}/{}".format(self.Game.Player1.Attack1.Damage,
+                                                                self.Game.Player1.Attack1.Hit_chance))
+        self.player1_button2_text.set("attack_1\n {}/{}".format(self.Game.Player1.Attack2.Damage,
+                                                                self.Game.Player1.Attack2.Hit_chance))
+        self.player1_button3_text.set("attack_1\n {}/{}".format(self.Game.Player1.Attack3.Damage,
+                                                                self.Game.Player1.Attack3.Hit_chance))
+        self.player1_button4_text.set("attack_1\n {}/{}".format(self.Game.Player1.Attack4.Damage,
+                                                                self.Game.Player1.Attack4.Hit_chance))
+
+        # changing the text on player 2 buttons
+        self.player2_button1_text.set("attack_1\n {}/{}".format(self.Game.Player2.Attack1.Damage,
+                                                                self.Game.Player2.Attack1.Hit_chance))
+        self.player2_button2_text.set("attack_1\n {}/{}".format(self.Game.Player2.Attack2.Damage,
+                                                                self.Game.Player2.Attack2.Hit_chance))
+        self.player2_button3_text.set("attack_1\n {}/{}".format(self.Game.Player2.Attack3.Damage,
+                                                                self.Game.Player2.Attack3.Hit_chance))
+        self.player2_button4_text.set("attack_1\n {}/{}".format(self.Game.Player2.Attack4.Damage,
+                                                                self.Game.Player2.Attack4.Hit_chance))
+
+
+        # setting and showing healthbars
+        self.Player1_health_bar = ttk.Progressbar(self.Game_window,
+                                                  orient="horizontal", length=WINDOW_WIDTH,
+                                                  maximum=self.Game.Player1.HP, value=self.Game.Player1.HP)
+        self.Player1_health_bar.grid(row=5, column=1, columnspan=2)
+        self.Player1_shown_health = self.Game.Player1.HP # TODO numvar?!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+        self.Player2_health_bar = ttk.Progressbar(self.Game_window,
+                                                  orient="horizontal", length=WINDOW_WIDTH,
+                                                  maximum=self.Game.Player2.HP, value=self.Game.Player2.HP)
+        self.Player2_health_bar.grid(row=2, column=1, columnspan=2)
+        self.Player2_shown_health = self.Game.Player2.HP # TODO numvar?
+
+
+        # loading player sprites
+        self.Player1_sprite_image = tkinter.PhotoImage(file='{}.png'.format(self.Game.Player1.Name))
+        self.Player1_sprite = self.Game_picture.create_image(WINDOW_WIDTH,
+                                                             WINDOW_HEIGHT * 3 // 4,
+                                                             image=self.Player1_sprite_image)
+
+        self.Player2_sprite_image=tkinter.PhotoImage(file='{}.png'.format(self.Game.Player2.Name))
+        self.Player2_sprite = self.Game_picture.create_image(WINDOW_WIDTH,
+                                                             WINDOW_HEIGHT // 4,
+                                                             image=self.Player2_sprite_image)
 
         # start with player 1
         self.Player1.play()

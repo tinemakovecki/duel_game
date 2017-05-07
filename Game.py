@@ -28,12 +28,17 @@ class Game():
 
 
     def copy(self):
-        """ copies the game in its current state without history adn returns the copy """
+        """ copies the game in its current state without history and returns the copy """
+        # generate new game and adjust it
         game_copy = Game()
         game_copy.Turn_number = self.Turn_number
-        game_copy.Current_player = self.Current_player
-        game_copy.Player1 = self.Player1
-        game_copy.Player2 = self.Player2
+        game_copy.Player1 = Class.copy_monster(self.Player1)
+        game_copy.Player2 = Class.copy_monster(self.Player2)
+        # reference the right player as the current player
+        if self.Current_player == self.Player1:
+            game_copy.Current_player = game_copy.Player1
+        else:
+            game_copy.Current_player = game_copy.Player2
 
         return game_copy
 

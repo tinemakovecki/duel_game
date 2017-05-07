@@ -74,13 +74,15 @@ def createPika():
 
 def copy_monster(monster):
     """ returns a copy of the given monster """
-    name = monster.Name
-    HP = monster.HP
-    attack1 = monster.Attack1
-    attack2 = monster.Attack2
-    attack3 = monster.Attack3
-    attack4 = monster.Attack4
-    # TODO are attacks okay!?
+    # generate a monster of the right type
+    if monster.Name == 'Pikachu':
+        monster_copy = createPika()
+    elif monster.Name == 'Charmander':
+        monster_copy = createChar()
 
-    monster_copy = Monster(name, HP, attack1, attack2, attack3, attack4)
+    # change life and modifier to match the given monster's
+    monster_copy.HP = monster.HP
+    monster_copy.Active_modifiers = [mod for mod in monster.Active_modifiers]
+
+    # return the copy
     return monster_copy
