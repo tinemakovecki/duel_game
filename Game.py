@@ -17,21 +17,31 @@ class Game():
 
     def save_state(self):
         """ adds current state of the game to history """
-        # (turn number, current player, player 1, player 2)
+        # add (turn number, current player, player 1, player 2) to game history
         # player 1 and player 2 contain data about active mods
-        # TODO
-        pass
+        turn_number = self.Turn_number
+        current_player = Class.copy_monster(self.Current_player)
+        player_1 = Class.copy_monster(self.Player1)
+        player_2 = Class.copy_monster(self.Player2)
+
+        self.history.append((turn_number, current_player, player_1, player_2))
 
 
     def copy(self):
-        # TODO for minmax
-        pass
+        """ copies the game in its current state without history adn returns the copy """
+        game_copy = Game()
+        game_copy.Turn_number = self.Turn_number
+        game_copy.Current_player = self.Current_player
+        game_copy.Player1 = self.Player1
+        game_copy.Player2 = self.Player2
+
+        return game_copy
 
 
     def reverse_move(self):
-        # history pop to assign new values -> put them into game variables
-        # TODO
-        pass
+        """ reverses one move and returns to the previous game state """
+        # assign previous values to game variables and remove one entry from game history
+        (self.Turn_number, self.Current_player, self.Player1, self.Player2) = self.history.pop()
 
 
     def return_opponent(self):
@@ -103,7 +113,7 @@ class Game():
                 self.Winner = 'Player 2'
         return self.Winner
 
-
+    # TODO change from modifier[x][y] to actual methods fo calling attributes
     def update_modifiers(self):
         ''' updates list of active modifiers for both players '''
         # update current player modifiers

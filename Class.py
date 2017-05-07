@@ -11,20 +11,20 @@ class Attack():
         # TODO empty modifier?
 
     # methods for calling retrieving properties
-    def Modifier_name(self):
-        '''return the name of the modifier'''
+    def modifier_name(self):
+        """ return the name of the modifier"""
         return self.Modifier[0]
 
-    def Modifier_damage(self):
-        '''return modifier effect on damage'''
+    def modifier_damage(self):
+        """ return modifier effect on damage"""
         return self.Modifier[1]
 
-    def Modifier_hit_chance(self):
-        '''return modifier effect on hit chance'''
+    def modifier_hit_chance(self):
+        """ return modifier effect on hit chance"""
         return self.Modifier[2]
 
     def target_opponent(self):
-        '''checks if the modifier affects the opponent'''
+        """ checks if the modifier affects the opponent"""
         # if it doesn't target the opponent it's modifies the active player
         return self.Modifier[3]
 
@@ -41,7 +41,7 @@ class Monster():
 
 # CONSTRUCTION FUNCTIONS
 def createChar():
-    '''constructs and returns Monster "charmander" '''
+    """ constructs and returns Monster "charmander" """
     # create the attacks first
     # attack = (name, damage, hit chance, modifier)
     # modifier = (name, DMG effect, hit effect, target opponent)
@@ -57,7 +57,7 @@ def createChar():
 
 
 def createPika():
-    '''constructs and returns Monster "pikachu" '''
+    """ constructs and returns Monster "pikachu" """
     # create the attacks first
     # attack = (name, damage, hit chance, modifier)
     # modifier = (name, DMG effect, hit effect, target opponent)
@@ -71,4 +71,16 @@ def createPika():
 
     return Pika
 
-# TODO other construction functions
+
+def copy_monster(monster):
+    """ returns a copy of the given monster """
+    name = monster.Name
+    HP = monster.HP
+    attack1 = monster.Attack1
+    attack2 = monster.Attack2
+    attack3 = monster.Attack3
+    attack4 = monster.Attack4
+    # TODO are attacks okay!?
+
+    monster_copy = Monster(name, HP, attack1, attack2, attack3, attack4)
+    return monster_copy
