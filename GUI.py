@@ -290,7 +290,7 @@ class GUI():
 
     ###  METHODS FOR ATTACK BUTTONS ###
 
-    def select_attack_for_player1(self, attack_number, certain_hit=True):
+    def select_attack_for_player1(self, attack_number, certain_hit=None):
         """ selects an attack for Player 1 after receiving the attack number """
         if self.Game.Current_player == self.Game.Player1:
             if attack_number == 1:
