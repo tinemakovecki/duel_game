@@ -23,7 +23,6 @@ class GUI():
 
         # window
         self.Game_window = tkinter.Frame(master, width=WINDOW_WIDTH, height=WINDOW_HEIGHT)
-        #self.Game_window.grid(row=0, column=0)
 
         # Main menu
         self.Main_menu = tkinter.Menu(master)
@@ -34,8 +33,9 @@ class GUI():
         self.Main_menu.add_cascade(label="Game", menu=self.Game_options_menu)
         self.Game_options_menu.add_command(label="Quit", command=self.quit)
         self.Game_options_menu.add_command(label="New game",
-                                           command=lambda: self.start_new_game(Player.Human(self), Player.Human(self)))
-        # TODO add restart/change 'New Game'
+                                           command=lambda: self.start_new_game(Player.Human(self),
+                                                                               Player.Human(self)))
+        # TODO add restart
         self.Game_options_menu.add_command(label="Help", command=self.help)
 
 
@@ -133,8 +133,7 @@ class GUI():
         # game over screen
         self.restart_button = tkinter.Button(master,
                                              text='Restart',
-                                             command=lambda: self.start_new_game(Player.Human(self),
-                                                                                 Player.Human(self)))
+                                             command=lambda: self.restart_game())
         self.game_over_display = tkinter.Canvas(master,
                                                 width=WINDOW_WIDTH,
                                                 height=WINDOW_HEIGHT,
@@ -198,14 +197,18 @@ class GUI():
 
         # setting and showing healthbars
         self.Player1_health_bar = ttk.Progressbar(self.Game_window,
-                                                  orient="horizontal", length=WINDOW_WIDTH,
-                                                  maximum=self.Game.Player1.HP, value=self.Game.Player1.HP)
+                                                  orient="horizontal",
+                                                  length=WINDOW_WIDTH,
+                                                  maximum=self.Game.Player1.HP,
+                                                  value=self.Game.Player1.HP)
         self.Player1_health_bar.grid(row=5, column=1, columnspan=2)
         self.Player1_shown_health = self.Game.Player1.HP # TODO numvar?!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         self.Player2_health_bar = ttk.Progressbar(self.Game_window,
-                                                  orient="horizontal", length=WINDOW_WIDTH,
-                                                  maximum=self.Game.Player2.HP, value=self.Game.Player2.HP)
+                                                  orient="horizontal",
+                                                  length=WINDOW_WIDTH,
+                                                  maximum=self.Game.Player2.HP,
+                                                  value=self.Game.Player2.HP)
         self.Player2_health_bar.grid(row=2, column=1, columnspan=2)
         self.Player2_shown_health = self.Game.Player2.HP # TODO numvar?
 
@@ -223,7 +226,6 @@ class GUI():
 
         # start with player 1
         self.Player1.play()
-        # TODO add new frame before game start
 
 
     def make_attack(self, selected_attack, certain_hit=None):
@@ -250,9 +252,20 @@ class GUI():
                                            font=("Purisa", 20),
                                            fill='white',
                                            text='GAME OVER')
-        #self.Feedback_caption.set("Game Over!")
+
         # TODO unbind the buttons / disable playing
         # self.Player = None
+
+
+    def restart_game(self):
+        """ switches the game back to the starting window """
+        # hide the game over screen
+        self.game_over_display.grid_remove()
+        self.restart_button.grid_remove()
+
+        # show the new game screen
+        self.new_game_display.grid(row=0)
+        self.new_game_button.grid(row=1)
 
 
     def show_turn_results(self, active_player, hit_check, damage_dealt): # # default value=zero?
@@ -277,38 +290,44 @@ class GUI():
 
     ###  METHODS FOR ATTACK BUTTONS ###
 
-    def select_attack_for_player1(self, attack_number):
+    def select_attack_for_player1(self, attack_number, certain_hit=True):
         """ selects an attack for Player 1 after receiving the attack number """
         if self.Game.Current_player == self.Game.Player1:
             if attack_number == 1:
-                self.Player1.make_attack(self.Game.Player1.Attack1)
+                self.Player1.make_attack(self.Game.Player1.Attack1, certain_hit)
+                return self.Game.Player1.Attack1
             elif attack_number == 2:
-                self.Player1.make_attack(self.Game.Player1.Attack2)
+                self.Player1.make_attack(self.Game.Player1.Attack2, certain_hit)
+                return self.Game.Player1.Attack2
             elif attack_number == 3:
-                self.Player1.make_attack(self.Game.Player1.Attack3)
+                self.Player1.make_attack(self.Game.Player1.Attack3, certain_hit)
+                return self.Game.Player1.Attack3
             elif attack_number == 4:
-                self.Player1.make_attack(self.Game.Player1.Attack4)
+                self.Player1.make_attack(self.Game.Player1.Attack4, certain_hit)
+                return self.Game.Player1.Attack4
         else:
             print("Not your turn!")
-            pass
-            # TODO print warning?
+            return
 
 
-    def select_attack_for_player2(self, attack_number):
-        """ selects an attack for Player 2 after receiving the attack number """
+    def select_attack_for_player2(self, attack_number, certain_hit=None):
+        """ selects an attack for Player 2 after receiving a number, returns the selected attack """
         if self.Game.Current_player == self.Game.Player2:
             if attack_number == 1:
-                self.Player2.make_attack(self.Game.Player2.Attack1)
+                self.Player2.make_attack(self.Game.Player2.Attack1, certain_hit)
+                return self.Game.Player2.Attack1
             elif attack_number == 2:
-                self.Player2.make_attack(self.Game.Player2.Attack2)
+                self.Player2.make_attack(self.Game.Player2.Attack2, certain_hit)
+                return self.Game.Player2.Attack2
             elif attack_number == 3:
-                self.Player2.make_attack(self.Game.Player2.Attack3)
+                self.Player2.make_attack(self.Game.Player2.Attack3, certain_hit)
+                return self.Game.Player2.Attack3
             elif attack_number == 4:
-                self.Player2.make_attack(self.Game.Player2.Attack4)
+                self.Player2.make_attack(self.Game.Player2.Attack4, certain_hit)
+                return self.Game.Player2.Attack4
         else:
             print("Not your turn!")
-            pass
-            # TODO print warning
+            return
 
     ###  METHODS FOR GAME OPTIONS MENU ###
 

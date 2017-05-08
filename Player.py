@@ -8,6 +8,6 @@ class Human():
         ''' idles and waits '''
         pass
 
-    def make_attack(self, selected):
+    def make_attack(self, selected, certain_hit):
         ''' makes an attack '''
-        self.Gui.make_attack(selected)
+        self.Gui.make_attack(selected, certain_hit)
