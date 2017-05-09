@@ -5,7 +5,7 @@ class Human():
         self.Gui = gui
 
     def play(self):
-        ''' idles and waits '''
+        ''' does nothing, waits for the player to select an attack '''
         pass
 
     def make_attack(self, selected, certain_hit):

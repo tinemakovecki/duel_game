@@ -83,6 +83,7 @@ def copy_monster(monster):
     # change life and modifier to match the given monster's
     monster_copy.HP = monster.HP
     monster_copy.Active_modifiers = [mod for mod in monster.Active_modifiers]
+    # TODO copy mods?
 
     # return the copy
     return monster_copy
