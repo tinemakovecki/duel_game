@@ -67,23 +67,37 @@ class Game():
         damage_dealt = calculate_damage(selected_attack, attacker_mods)
 
         # check if an attack hits
-        if certain_hit == None:
+        if certain_hit is None:
             hit_check = check_hit(selected_attack, attacker_mods)
         # options for certain hit/miss to use for computer player decisions
-        elif certain_hit == True:
+        elif certain_hit:
             hit_check = True
-        elif certain_hit == False:
+        elif not certain_hit:
             hit_check = False
 
         # if the attack hits move on to the effects
-        if hit_check == True:
+        if hit_check:
             self.return_opponent().HP -= damage_dealt
             # a modifier activates sometimes, half the time for now
             if random.random() > 1/2:
                 new_mod = selected_attack.Modifier # direct call instead of constructor, MIGHT EDIT ORIGINAL!?
-                if selected_attack.Modifier[3] == True: # check if modifier targets opponent
+                if new_mod[3]: # check if modifier targets opponent
+                    same_mod = None
+                    for (turn_number, mod) in defender_mods:
+                        if mod[0] == new_mod[0]:
+                            same_mod = mod
+                            same_mod_turn = turn_number
+                    if same_mod is not None:
+                        defender_mods.remove((same_mod_turn, same_mod))
                     defender_mods.append((self.Turn_number, new_mod))
                 else:
+                    same_mod = None
+                    for (turn_number, mod) in attacker_mods:
+                        if mod[0] == new_mod[0]:
+                            same_mod = mod
+                            same_mod_turn = turn_number
+                    if same_mod is not None:
+                        attacker_mods.remove((same_mod_turn, same_mod))
                     attacker_mods.append((self.Turn_number, new_mod))
 
         # defines which player played the turn
@@ -95,7 +109,7 @@ class Game():
 
         # game state update/check if game over
         self.check_game_state()
-        if self.Game_active == False:
+        if not self.Game_active:
             return (active_player, hit_check, damage_dealt)
 
         # if game isn't over, update objects and move on to next turn
