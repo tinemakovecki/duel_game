@@ -1,9 +1,12 @@
 ####### - MAIN GAME FILE & USER INTERFACE - #######
 
+import logging
 import tkinter
 from tkinter import ttk
 import Game
 import Player
+import Computer
+import Minimax
 
 root = tkinter.Tk()
 root.title("Duel Game")
@@ -146,10 +149,16 @@ class GUI():
 
 
         # new game screen
-        self.new_game_button = tkinter.Button(master,
-                                              text='Start game',
-                                              command=lambda: self.start_new_game(Player.Human(self),
-                                                                                  Player.Human(self)))
+        self.new_game_button_human = tkinter.Button(master,
+                                                       text='Start human game',
+                                                       command=lambda: self.start_new_game(Player.Human(self),
+                                                                                           Player.Human(self)))
+
+        self.new_game_button_computer = tkinter.Button(master,
+                                                       text='Start computer game',
+                                                       command=lambda: self.start_new_game(Player.Human(self),
+                                                                                           Computer.Computer(self,
+                                                                                                             Minimax.Minimax(3))))
 
         self.new_game_display = tkinter.Canvas(master,
                                                width=WINDOW_WIDTH,
@@ -163,19 +172,23 @@ class GUI():
                                           text='WELCOME')
 
         self.new_game_display.grid(row=0)
-        self.new_game_button.grid(row=1)
+        self.new_game_button_human.grid(row=1)
+        self.new_game_button_computer.grid(row=2)
 
     ##### - GAME & GUI METHODS - #####
 
     def start_new_game(self, player1, player2):
         """ starts a new game """
+        self.interrupt_players()
+
         self.Game = Game.Game()
         self.Player1 = player1
         self.Player2 = player2
 
         # show the main game window
         self.new_game_display.grid_remove()
-        self.new_game_button.grid_remove()
+        self.new_game_button_human.grid_remove()
+        self.new_game_button_computer.grid_remove()
         self.Game_window.grid(row=0)
         self.feedback_caption.grid(row=12)
 
@@ -183,12 +196,15 @@ class GUI():
         self.player1_button1_text.set("{}\n {}/{}".format(self.Game.Player1.Attack1.Name,
                                                           self.Game.Player1.Attack1.Damage,
                                                           self.Game.Player1.Attack1.Hit_chance))
+
         self.player1_button2_text.set("{}\n {}/{}".format(self.Game.Player1.Attack2.Name,
                                                           self.Game.Player1.Attack2.Damage,
                                                           self.Game.Player1.Attack2.Hit_chance))
+
         self.player1_button3_text.set("{}\n {}/{}".format(self.Game.Player1.Attack3.Name,
                                                           self.Game.Player1.Attack3.Damage,
                                                           self.Game.Player1.Attack3.Hit_chance))
+
         self.player1_button4_text.set("{}\n {}/{}".format(self.Game.Player1.Attack4.Name,
                                                           self.Game.Player1.Attack4.Damage,
                                                           self.Game.Player1.Attack4.Hit_chance))
@@ -197,12 +213,15 @@ class GUI():
         self.player2_button1_text.set("{}\n {}/{}".format(self.Game.Player2.Attack1.Name,
                                                           self.Game.Player2.Attack1.Damage,
                                                           self.Game.Player2.Attack1.Hit_chance))
+
         self.player2_button2_text.set("{}\n {}/{}".format(self.Game.Player2.Attack2.Name,
                                                           self.Game.Player2.Attack2.Damage,
                                                           self.Game.Player2.Attack2.Hit_chance))
+
         self.player2_button3_text.set("{}\n {}/{}".format(self.Game.Player2.Attack3.Name,
                                                           self.Game.Player2.Attack3.Damage,
                                                           self.Game.Player2.Attack3.Hit_chance))
+
         self.player2_button4_text.set("{}\n {}/{}".format(self.Game.Player2.Attack4.Name,
                                                           self.Game.Player2.Attack4.Damage,
                                                           self.Game.Player2.Attack4.Hit_chance))
@@ -260,7 +279,15 @@ class GUI():
         (active_player, hit_check, damage_dealt) = self.Game.take_turn(selected_attack, certain_hit)
         # the game continues
         if self.Game.Game_active:
+            # show what happened this turn
             self.show_turn_results(active_player, hit_check, damage_dealt)
+
+            # start the next turn
+            if self.Game.Current_player == self.Game.Player1:
+                self.Player1.play()
+            elif self.Game.Current_player == self.Game.Player2:
+                self.Player2.play()
+
         # if the game is over
         else:
             self.show_turn_results(active_player, hit_check, damage_dealt)
@@ -300,7 +327,16 @@ class GUI():
 
         # show the new game screen
         self.new_game_display.grid(row=0)
-        self.new_game_button.grid(row=1)
+        self.new_game_button_human.grid(row=1)
+        self.new_game_button_computer.grid(row=1)
+
+
+    def interrupt_players(self):
+        """ interrupt both players """
+        logging.debug ("prekinjam igralce")
+        if self.Player1: self.Player1.interrupt()
+        if self.Player2: self.Player2.interrupt()
+
 
     def show_turn_results(self, active_player, hit_check, damage_dealt):  # # default value=zero?
         """ updates the current state of the game in the GUI """
@@ -384,6 +420,7 @@ class GUI():
 
     def quit(self):
         """ closes the game window """
+        self.interrupt_players()
         root.destroy()
 
     def help(self):

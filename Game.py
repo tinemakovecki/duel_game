@@ -17,14 +17,18 @@ class Game():
 
     def save_state(self):
         """ adds current state of the game to history """
-        # add (turn number, current player, player 1, player 2) to game history
+        # add (turn number, active player, player 1, player 2) to game history
         # player 1 and player 2 contain data about active mods
         turn_number = self.Turn_number
-        current_player = Class.copy_monster(self.Current_player)
         player_1 = Class.copy_monster(self.Player1)
         player_2 = Class.copy_monster(self.Player2)
+        # save which player's turn it is
+        if self.Current_player == self.Player1:
+            active_player = 'player 1'
+        else:
+            active_player = 'player 2'
 
-        self.history.append((turn_number, current_player, player_1, player_2))
+        self.history.append((turn_number, active_player, player_1, player_2))
 
 
     def copy(self):
@@ -46,7 +50,14 @@ class Game():
     def reverse_move(self):
         """ reverses one move and returns to the previous game state """
         # assign previous values to game variables and remove one entry from game history
-        (self.Turn_number, self.Current_player, self.Player1, self.Player2) = self.history.pop()
+        (self.Turn_number, active_player, self.Player1, self.Player2) = self.history.pop()
+        # assign the right Current_player
+        if active_player == 'player 1':
+            self.Current_player = self.Player1
+        elif active_player == 'player 2':
+            self.Current_player = self.Player2
+        else:
+            assert False, " reversing moves player assignment broke "
 
 
     def return_opponent(self):
@@ -62,6 +73,7 @@ class Game():
 
     def take_turn(self, selected_attack, certain_hit):
         ''' completes a single game turn, returns pair (winner, damage dealt) '''
+        self.save_state()  # save current state before doing anything
         attacker_mods = self.Current_player.Active_modifiers
         defender_mods = self.return_opponent().Active_modifiers
         damage_dealt = calculate_damage(selected_attack, attacker_mods)

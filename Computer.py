@@ -20,19 +20,19 @@ class Computer:
         self.thinker.start()
 
         # checking if a turn has been selected
-        self.gui.Game_window.after(100, self.check_move)
+        self.gui.Game_window.after(100, self.check_for_attack)
 
 
     def check_for_attack(self):
         """ checks if the algorithm has selected an attack each 100 ms """
-        if self.algorithm.move is not None:
+        if self.algorithm.selected_attack is not None:
             # the attack selected by the algorithm is performed
-            self.gui.make_attack(self.algorithm.chosen_attack)
+            self.gui.make_attack(self.algorithm.selected_attack)
             # the thinker thread has finished work, we remove it
             self.thinker = None
         else:
-            # the algorithm hasn't found a move yet, check back later
-            self.gui.Game_window.after(100, self.check_move())
+            # the algorithm hasn't found an attack yet, check back later
+            self.gui.Game_window.after(100, self.check_for_attack())
 
 
     def interrupt(self):

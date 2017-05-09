@@ -1,8 +1,8 @@
 ### - CLASSES - ###
-# TODO connect class and game file
+
 
 # ATTACK CLASS
-class Attack():
+class Attack:
     def __init__(self, Name, Damage, Hit_chance, Modifier): # modifier = (name, DMG effect, hit effect, target opponent)
         self.Name = Name
         self.Damage = Damage
@@ -28,8 +28,9 @@ class Attack():
         # if it doesn't target the opponent it's modifies the active player
         return self.Modifier[3]
 
+
 # MONSTER CLASS
-class Monster():
+class Monster:
     def __init__(self, Name, HP, Attack1, Attack2, Attack3, Attack4): # the attack arguments should belong to Attack() class!
         self.Name = Name
         self.HP = HP # TODO seperate current and full health?
@@ -38,6 +39,7 @@ class Monster():
         self.Attack3 = Attack3
         self.Attack4 = Attack4
         self.Active_modifiers = []
+
 
 # CONSTRUCTION FUNCTIONS
 def createChar():
@@ -87,3 +89,10 @@ def copy_monster(monster):
 
     # return the copy
     return monster_copy
+
+
+# UTILITY
+def possible_attacks(monster):
+    """ returns a list of the attacks a monster can make """
+    attacks = [monster.Attack1, monster.Attack2, monster.Attack3, monster.Attack4]
+    return attacks

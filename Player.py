@@ -11,3 +11,7 @@ class Human():
     def make_attack(self, selected, certain_hit):
         ''' makes an attack '''
         self.Gui.make_attack(selected, certain_hit)
+
+    def interrupt(self):
+        """ happens when interrupting players, does nothing """
+        pass
