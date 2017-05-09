@@ -42,81 +42,86 @@ class GUI():
         # buttons
         # player 1 is at the bottom
         self.player1_button1_text = tkinter.StringVar()
-        self.Player1_button1 = tkinter.Button(self.Game_window,
+        self.Player1_button1 = tkinter.Button(self.Game_window, height=2, width=8,
                                               textvariable=self.player1_button1_text,
                                               justify="right",
                                               command=lambda: self.select_attack_for_player1(1))
-        self.Player1_button1.grid(row=6, column=0, columnspan=2, rowspan=1)
+        self.Player1_button1.grid(row=10, column=0, columnspan=2, rowspan=1)
 
         self.player1_button2_text = tkinter.StringVar()
-        self.Player1_button2 = tkinter.Button(self.Game_window,
+        self.Player1_button2 = tkinter.Button(self.Game_window, height=2, width=8,
                                               textvariable=self.player1_button2_text,
                                               justify="right",
                                               command=lambda: self.select_attack_for_player1(2))
-        self.Player1_button2.grid(row=6, column=2, columnspan=2)
+        self.Player1_button2.grid(row=10, column=2, columnspan=2)
 
         self.player1_button3_text = tkinter.StringVar()
-        self.Player1_button3 = tkinter.Button(self.Game_window,
+        self.Player1_button3 = tkinter.Button(self.Game_window, height=2, width=8,
                                               textvariable=self.player1_button3_text,
                                               justify="right",
                                               command=lambda: self.select_attack_for_player1(3))
-        self.Player1_button3.grid(row=7, column=0, columnspan=2)
+        self.Player1_button3.grid(row=11, column=0, columnspan=2)
 
         self.player1_button4_text = tkinter.StringVar()
-        self.Player1_button4 = tkinter.Button(self.Game_window,
+        self.Player1_button4 = tkinter.Button(self.Game_window, height=2, width=8,
                                               textvariable=self.player1_button4_text,
                                               justify="right",
                                               command=lambda: self.select_attack_for_player1(4))
-        self.Player1_button4.grid(row=7, column=2, columnspan=2)
+        self.Player1_button4.grid(row=11, column=2, columnspan=2)
 
 
         # player 2 is at the top
         self.player2_button1_text = tkinter.StringVar()
-        self.Player2_button1 = tkinter.Button(self.Game_window,
+        self.Player2_button1 = tkinter.Button(self.Game_window, height=2, width=8,
                                               textvariable=self.player2_button1_text,
                                               justify="right",
                                               command=lambda: self.select_attack_for_player2(1))
         self.Player2_button1.grid(row=0, column=0, columnspan=2)
 
         self.player2_button2_text = tkinter.StringVar()
-        self.Player2_button2 = tkinter.Button(self.Game_window,
+        self.Player2_button2 = tkinter.Button(self.Game_window, height=2, width=8,
                                               textvariable=self.player2_button2_text,
                                               justify="right",
                                               command=lambda: self.select_attack_for_player2(2))
         self.Player2_button2.grid(row=0, column=2, columnspan=2)
 
         self.player2_button3_text = tkinter.StringVar()
-        self.Player2_button3 = tkinter.Button(self.Game_window,
+        self.Player2_button3 = tkinter.Button(self.Game_window, height=2, width=8,
                                               textvariable=self.player2_button3_text,
                                               justify="right",
                                               command=lambda: self.select_attack_for_player2(3))
         self.Player2_button3.grid(row=1, column=0, columnspan=2)
 
         self.player2_button4_text = tkinter.StringVar()
-        self.Player2_button4 = tkinter.Button(self.Game_window,
+        self.Player2_button4 = tkinter.Button(self.Game_window, height=2, width=8,
                                               textvariable=self.player2_button4_text,
                                               justify="right",
                                               command=lambda: self.select_attack_for_player2(4))
         self.Player2_button4.grid(row=1, column=2, columnspan=2)
 
 
-        # declaring health bars, they are changed later
+        # declaring health bars and modifiers feedback caption, they are changed later
         self.Player1_health_bar = None
         self.Player1_shown_health = None
 
         self.Player2_health_bar = None
         self.Player2_shown_health = None
 
+        self.feedback_modifiers_player1_text = tkinter.StringVar(self.Game_window)
+        self.feedback_modifiers_player2_text = tkinter.StringVar(self.Game_window)
+        self.feedback_modifiers_player1 = None
+        self.feedback_modifiers_player2 = None
+
 
         # caption
         self.feedback_caption_text = tkinter.StringVar(self.Game_window, value="Welcome!")
         self.feedback_caption = tkinter.Label(master, textvariable=self.feedback_caption_text)
-        self.feedback_caption.grid(row=8)
+        self.feedback_caption.grid(row=12)
 
 
         # game image
         self.Game_picture = tkinter.Canvas(self.Game_window, background='white')
-        self.Game_picture.grid(row=3, rowspan=2, column=0, columnspan=4)
+        self.Game_picture.grid(row=5, rowspan=2, column=0, columnspan=4)
 
         # creating background
         self.Background_image = tkinter.PhotoImage(file='background.png')
@@ -172,27 +177,49 @@ class GUI():
         self.new_game_display.grid_remove()
         self.new_game_button.grid_remove()
         self.Game_window.grid(row=0)
-        self.feedback_caption.grid(row=8)
+        self.feedback_caption.grid(row=12)
 
         # changing the text on player 1 buttons
-        self.player1_button1_text.set("attack_1\n {}/{}".format(self.Game.Player1.Attack1.Damage,
-                                                                self.Game.Player1.Attack1.Hit_chance))
-        self.player1_button2_text.set("attack_1\n {}/{}".format(self.Game.Player1.Attack2.Damage,
-                                                                self.Game.Player1.Attack2.Hit_chance))
-        self.player1_button3_text.set("attack_1\n {}/{}".format(self.Game.Player1.Attack3.Damage,
-                                                                self.Game.Player1.Attack3.Hit_chance))
-        self.player1_button4_text.set("attack_1\n {}/{}".format(self.Game.Player1.Attack4.Damage,
-                                                                self.Game.Player1.Attack4.Hit_chance))
+        self.player1_button1_text.set("{}\n {}/{}".format(self.Game.Player1.Attack1.Name,
+                                                          self.Game.Player1.Attack1.Damage,
+                                                          self.Game.Player1.Attack1.Hit_chance))
+        self.player1_button2_text.set("{}\n {}/{}".format(self.Game.Player1.Attack2.Name,
+                                                          self.Game.Player1.Attack2.Damage,
+                                                          self.Game.Player1.Attack2.Hit_chance))
+        self.player1_button3_text.set("{}\n {}/{}".format(self.Game.Player1.Attack3.Name,
+                                                          self.Game.Player1.Attack3.Damage,
+                                                          self.Game.Player1.Attack3.Hit_chance))
+        self.player1_button4_text.set("{}\n {}/{}".format(self.Game.Player1.Attack4.Name,
+                                                          self.Game.Player1.Attack4.Damage,
+                                                          self.Game.Player1.Attack4.Hit_chance))
 
         # changing the text on player 2 buttons
-        self.player2_button1_text.set("attack_1\n {}/{}".format(self.Game.Player2.Attack1.Damage,
-                                                                self.Game.Player2.Attack1.Hit_chance))
-        self.player2_button2_text.set("attack_1\n {}/{}".format(self.Game.Player2.Attack2.Damage,
-                                                                self.Game.Player2.Attack2.Hit_chance))
-        self.player2_button3_text.set("attack_1\n {}/{}".format(self.Game.Player2.Attack3.Damage,
-                                                                self.Game.Player2.Attack3.Hit_chance))
-        self.player2_button4_text.set("attack_1\n {}/{}".format(self.Game.Player2.Attack4.Damage,
-                                                                self.Game.Player2.Attack4.Hit_chance))
+        self.player2_button1_text.set("{}\n {}/{}".format(self.Game.Player2.Attack1.Name,
+                                                          self.Game.Player2.Attack1.Damage,
+                                                          self.Game.Player2.Attack1.Hit_chance))
+        self.player2_button2_text.set("{}\n {}/{}".format(self.Game.Player2.Attack2.Name,
+                                                          self.Game.Player2.Attack2.Damage,
+                                                          self.Game.Player2.Attack2.Hit_chance))
+        self.player2_button3_text.set("{}\n {}/{}".format(self.Game.Player2.Attack3.Name,
+                                                          self.Game.Player2.Attack3.Damage,
+                                                          self.Game.Player2.Attack3.Hit_chance))
+        self.player2_button4_text.set("{}\n {}/{}".format(self.Game.Player2.Attack4.Name,
+                                                          self.Game.Player2.Attack4.Damage,
+                                                          self.Game.Player2.Attack4.Hit_chance))
+
+        # reseting the variable captions
+        self.feedback_modifiers_player1_text.set("No modifiers affecting {}".format(self.Game.Player1.Name))
+        self.feedback_modifiers_player2_text.set("No modifiers affecting {}".format(self.Game.Player2.Name))
+        self.feedback_caption_text.set("Welcome!")
+
+
+        self.feedback_modifiers_player1 = tkinter.Label(self.Game_window, height=2, wraplength=WINDOW_WIDTH * 1.9,
+                                                        textvariable=self.feedback_modifiers_player1_text)
+        self.feedback_modifiers_player1.grid(row=7, rowspan=2, column=0, columnspan=4)
+
+        self.feedback_modifiers_player2 = tkinter.Label(self.Game_window, height=2, wraplength=WINDOW_WIDTH * 1.9,
+                                                        textvariable=self.feedback_modifiers_player2_text)
+        self.feedback_modifiers_player2.grid(row=2, rowspan=2, column=0, columnspan=4)
 
 
         # setting and showing healthbars
@@ -201,7 +228,7 @@ class GUI():
                                                   length=WINDOW_WIDTH,
                                                   maximum=self.Game.Player1.HP,
                                                   value=self.Game.Player1.HP)
-        self.Player1_health_bar.grid(row=5, column=1, columnspan=2)
+        self.Player1_health_bar.grid(row=9, column=1, columnspan=2)
         self.Player1_shown_health = self.Game.Player1.HP # TODO numvar?!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         self.Player2_health_bar = ttk.Progressbar(self.Game_window,
@@ -209,7 +236,7 @@ class GUI():
                                                   length=WINDOW_WIDTH,
                                                   maximum=self.Game.Player2.HP,
                                                   value=self.Game.Player2.HP)
-        self.Player2_health_bar.grid(row=2, column=1, columnspan=2)
+        self.Player2_health_bar.grid(row=4, column=1, columnspan=2)
         self.Player2_shown_health = self.Game.Player2.HP # TODO numvar?
 
 
@@ -232,7 +259,7 @@ class GUI():
         """ makes an attack """
         (active_player, hit_check, damage_dealt) = self.Game.take_turn(selected_attack, certain_hit)
         # the game continues
-        if self.Game.Game_active == True:
+        if self.Game.Game_active:
             self.show_turn_results(active_player, hit_check, damage_dealt)
         # if the game is over
         else:
@@ -244,6 +271,8 @@ class GUI():
         """ ends the game """
         self.Game_window.grid_remove()
         self.feedback_caption.grid_remove()
+        self.feedback_modifiers_player1.grid_remove()
+        self.feedback_modifiers_player2.grid_remove()
         self.game_over_display.grid()
         self.restart_button.grid()
 
@@ -262,16 +291,17 @@ class GUI():
         # hide the game over screen
         self.game_over_display.grid_remove()
         self.restart_button.grid_remove()
+        self.feedback_modifiers_player1.grid_remove()
+        self.feedback_modifiers_player2.grid_remove()
 
         # show the new game screen
         self.new_game_display.grid(row=0)
         self.new_game_button.grid(row=1)
 
-
-    def show_turn_results(self, active_player, hit_check, damage_dealt): # # default value=zero?
+    def show_turn_results(self, active_player, hit_check, damage_dealt):  # # default value=zero?
         """ updates the current state of the game in the GUI """
         # first case if the attack landed
-        if hit_check == True:
+        if hit_check:
             if active_player == 'Player 1':
                 self.Player2_shown_health = self.Game.Player2.HP
                 self.Player2_health_bar["value"] = self.Player2_shown_health
@@ -284,6 +314,25 @@ class GUI():
                                                                                            damage_dealt))
             else:
                 assert False, "invalid player"
+            # updating modifiers feedback
+            if len(self.Game.Player1.Active_modifiers) == 0:
+                self.feedback_modifiers_player1_text.set("No modifiers affecting {}".format(self.Game.Player1.Name))
+            else:
+                name, damage_effect, hit_effect, target = self.Game.Player1.Active_modifiers[0][1]
+                mod_str = "{}:{}/{}".format(name, damage_effect, hit_effect)
+                for (turn_number, mod) in self.Game.Player1.Active_modifiers[1:]:
+                    mod_str += ", {}:{}/{}".format(mod[0], mod[1], mod[2])
+                self.feedback_modifiers_player1_text.set(
+                    "Modifiers affecting {}: {}".format(self.Game.Player1.Name, mod_str))
+            if len(self.Game.Player2.Active_modifiers) == 0:
+                self.feedback_modifiers_player2_text.set("No modifiers affecting {}".format(self.Game.Player2.Name))
+            else:
+                name, damage_effect, hit_effect, target = self.Game.Player2.Active_modifiers[0][1]
+                mod_str = "{}:{}/{}".format(name, damage_effect, hit_effect)
+                for (turn_number, mod) in self.Game.Player2.Active_modifiers[1:]:
+                    mod_str += ", {}:{}/{}".format(mod[0], mod[1], mod[2])
+                self.feedback_modifiers_player2_text.set(
+                    "Modifiers affecting {}: {}".format(self.Game.Player2.Name, mod_str))
         # the attack missed
         else:
             self.feedback_caption_text.set("Missed! {}'s turn.".format(self.Game.Current_player.Name))
@@ -306,7 +355,6 @@ class GUI():
                 self.Player1.make_attack(self.Game.Player1.Attack4, certain_hit)
                 return self.Game.Player1.Attack4
         else:
-            print("Not your turn!")
             return
 
 
@@ -326,7 +374,6 @@ class GUI():
                 self.Player2.make_attack(self.Game.Player2.Attack4, certain_hit)
                 return self.Game.Player2.Attack4
         else:
-            print("Not your turn!")
             return
 
     ###  METHODS FOR GAME OPTIONS MENU ###
