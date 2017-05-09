@@ -275,12 +275,16 @@ class GUI():
         self.feedback_modifiers_player2.grid_remove()
         self.game_over_display.grid()
         self.restart_button.grid()
-
-        self.game_over_display.create_text(WINDOW_WIDTH / 2,
-                                           WINDOW_HEIGHT / 2,
-                                           font=("Purisa", 20),
-                                           fill='white',
-                                           text='GAME OVER')
+        if self.Game.Winner == "Player 1":
+            self.game_over_display.create_text(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2,
+                                               font=("Purisa", 20), justify="center", fill='white',
+                                               text='GAME OVER\nwinner:\n{}'.format(self.Game.Player1.Name))
+        elif self.Game.Winner == "Player 2":
+            self.game_over_display.create_text(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2,
+                                               font=("Purisa", 20), justify="center", fill='white',
+                                               text='GAME OVER\nwinner:\n{}'.format(self.Game.Player2.Name))
+        else:
+            assert False; "Game is not over yet"
 
         # TODO unbind the buttons / disable playing
         # self.Player = None

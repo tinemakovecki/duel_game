@@ -81,9 +81,23 @@ class Game():
             # a modifier activates sometimes, half the time for now
             if random.random() > 1/2:
                 new_mod = selected_attack.Modifier # direct call instead of constructor, MIGHT EDIT ORIGINAL!?
-                if selected_attack.Modifier[3]: # check if modifier targets opponent
+                if new_mod[3]: # check if modifier targets opponent
+                    same_mod = None
+                    for (turn_number, mod) in defender_mods:
+                        if mod[0] == new_mod[0]:
+                            same_mod = mod
+                            same_mod_turn = turn_number
+                    if same_mod is not None:
+                        defender_mods.remove((same_mod_turn, same_mod))
                     defender_mods.append((self.Turn_number, new_mod))
                 else:
+                    same_mod = None
+                    for (turn_number, mod) in attacker_mods:
+                        if mod[0] == new_mod[0]:
+                            same_mod = mod
+                            same_mod_turn = turn_number
+                    if same_mod is not None:
+                        attacker_mods.remove((same_mod_turn, same_mod))
                     attacker_mods.append((self.Turn_number, new_mod))
 
         # defines which player played the turn
