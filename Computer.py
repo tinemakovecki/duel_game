@@ -20,7 +20,7 @@ class Computer:
         self.thinker.start()
 
         # checking if a turn has been selected
-        self.gui.Game_window.after(100, self.check_for_attack)
+        self.gui.game_window.after(100, self.check_for_attack)
 
 
     def check_for_attack(self):
@@ -32,7 +32,7 @@ class Computer:
             self.thinker = None
         else:
             # the algorithm hasn't found an attack yet, check back later
-            self.gui.Game_window.after(100, self.check_for_attack())
+            self.gui.game_window.after(100, self.check_for_attack())
 
 
     def interrupt(self):

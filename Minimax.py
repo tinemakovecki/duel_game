@@ -41,24 +41,24 @@ class Minimax():
         """ assigns a value to the current state of the game """
         # positive is good for Player 1, negative is good for Player 2
 
-        if self.game.return_opponent().HP <= 0:
+        if self.game.return_opponent().hp <= 0:
             return Minimax.VICTORY
-        elif self.game.Current_player.HP <= 0:
+        elif self.game.Current_player.hp <= 0:
             return -Minimax.VICTORY
 
         # the basis is the health difference
-        value = (self.game.Current_player.HP - self.game.return_opponent().HP) * 100
+        value = (self.game.current_player.hp - self.game.return_opponent().hp) * 100
 
         # also look at active modifiers
         # first for Player 1
-        for element in self.game.Player1.Active_modifiers:
+        for element in self.game.player1.active_modifiers:
             x, mod = element
             # mod = (name, damage effect, accuracy effect, target opponent)
             value += mod[1] * 110
             value += mod[2] * 120
 
         # check Player 2 modfiers
-        for element in self.game.Player2.Active_modifiers:
+        for element in self.game.player2.active_modifiers:
             x, mod = element
             value -= mod[1] * 110
             value -= mod[2] * 120
@@ -75,13 +75,13 @@ class Minimax():
             return (None, 0)
 
         # check if the game is over, if so, return (None, game state value)
-        if not self.game.Game_active:
-            if self.game.Winner == self.game.Player1:
+        if not self.game.game_active:
+            if self.game.winner == self.game.player1:
                 return (None, Minimax.VICTORY)
-            elif self.game.Winner == self.game.Player2:
+            elif self.game.winner == self.game.player2:
                 return (None, -Minimax.VICTORY)
             else:
-                assert (self.game.Winner != 'undefined'), 'minimax: game is over without a winner'
+                assert (self.game.winner != 'undefined'), 'minimax: game is over without a winner'
 
         # game isn't over
         else:
@@ -96,7 +96,7 @@ class Minimax():
                     best_attack = None
                     best_attack_value = - Minimax.INFINITY
 
-                    for attack in possible_attacks(self.game.Current_player):
+                    for attack in possible_attacks(self.game.current_player):
                         # we separate the options of hitting or missing
                         # the attack hits
                         self.game.take_turn(attack, certain_hit=True)
@@ -109,7 +109,7 @@ class Minimax():
                         self.game.reverse_move()
 
                         # calculate total attack value depending on hit chance
-                        hit_chance = attack.Hit_chance / 100
+                        hit_chance = attack.hit_chance / 100
                         miss_chance = 1 - hit_chance
                         attack_value = hit_value * hit_chance + miss_value * miss_chance
 
@@ -123,7 +123,7 @@ class Minimax():
                     best_attack = None
                     best_attack_value = Minimax.INFINITY
 
-                    for attack in possible_attacks(self.game.Current_player):
+                    for attack in possible_attacks(self.game.current_player):
                         # we separate the options of hitting or missing
                         # the attack hits
                         self.game.take_turn(attack, certain_hit=True)
@@ -136,7 +136,7 @@ class Minimax():
                         self.game.reverse_move()
 
                         # calculate total attack value depending on hit chance
-                        hit_chance = attack.Hit_chance / 100
+                        hit_chance = attack.hit_chance / 100
                         miss_chance = 1 - hit_chance
                         attack_value = hit_value * hit_chance + miss_value * miss_chance
 

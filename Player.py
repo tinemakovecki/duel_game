@@ -2,7 +2,7 @@
 
 class Human():
     def __init__(self, gui):
-        self.Gui = gui
+        self.gui = gui
 
     def play(self):
         ''' does nothing, waits for the player to select an attack '''
@@ -10,7 +10,7 @@ class Human():
 
     def make_attack(self, selected, certain_hit):
         ''' makes an attack '''
-        self.Gui.make_attack(selected, certain_hit)
+        self.gui.make_attack(selected, certain_hit)
 
     def interrupt(self):
         """ happens when interrupting players, does nothing """
