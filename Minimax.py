@@ -57,7 +57,7 @@ class Minimax():
             value += mod[1] * 110
             value += mod[2] * 120
 
-        # check Player 2 modfiers
+        # check Player 2 modifiers
         for element in self.game.player2.active_modifiers:
             x, mod = element
             value -= mod[1] * 110

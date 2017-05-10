@@ -32,14 +32,11 @@ class GUI():
         master.config(menu=self.main_menu)
 
         # Submenu
-        self.game_options_menu = tkinter.Menu(self.main_menu)
+        self.game_options_menu = tkinter.Menu(self.main_menu, tearoff=0)
         self.main_menu.add_cascade(label="Game", menu=self.game_options_menu)
-        self.game_options_menu.add_command(label="Quit", command=self.quit)
-        self.game_options_menu.add_command(label="New game",
-                                           command=lambda: self.start_new_game(Player.Human(self),
-                                                                               Player.Human(self)))
-        # TODO add restart
         self.game_options_menu.add_command(label="Help", command=self.help)
+        self.game_options_menu.add_command(label="Quit", command=self.quit)
+        self.game_options_menu.add_command(label="New game", command=self.restart_game)
 
 
         # buttons
@@ -119,7 +116,6 @@ class GUI():
         # caption
         self.feedback_caption_text = tkinter.StringVar(self.game_window, value="Welcome!")
         self.feedback_caption = tkinter.Label(master, textvariable=self.feedback_caption_text)
-        self.feedback_caption.grid(row=12)
 
 
         # game image
@@ -149,31 +145,47 @@ class GUI():
 
 
         # new game screen
-        self.new_game_button_human = tkinter.Button(master,
-                                                       text='Start human game',
-                                                       command=lambda: self.start_new_game(Player.Human(self),
-                                                                                           Player.Human(self)))
+        self.new_game_caption = tkinter.Label(master, text="Select options for both players")
+        self.new_player1 = tkinter.StringVar()
+        self.new_player1.set("Human")
+        self.new_player2 = tkinter.StringVar()
+        self.new_player2.set("Human")
 
-        self.new_game_button_computer = tkinter.Button(master,
-                                                       text='Start computer game',
-                                                       command=lambda:
-                                                       self.start_new_game(Player.Human(self),
-                                                                           Computer.Computer(self, Minimax.Minimax(3))))
+
+        self.new_game_button_player1_human = tkinter.Radiobutton(master, text="Human", justify='left',
+                                                                 variable=self.new_player1, value="Human")
+        self.new_game_button_player1_computer = tkinter.Radiobutton(master, text="Computer", justify='left',
+                                                                    variable=self.new_player1, value="Computer")
+
+        self.new_game_button_player2_human = tkinter.Radiobutton(master, text="Human", justify='left',
+                                                                 variable=self.new_player2, value="Human")
+
+        self.new_game_button_player2_computer = tkinter.Radiobutton(master, text="Computer", justify='left',
+                                                                    variable=self.new_player2, value="Computer")
+
+        self.new_game_button = tkinter.Button(master, text='Start new game',
+                                              command=lambda: self.start_new_game())
+
 
         self.new_game_display = tkinter.Canvas(master,
                                                width=WINDOW_WIDTH,
-                                               height=WINDOW_HEIGHT,
+                                               height=WINDOW_HEIGHT // 2,
                                                background='black')
 
         self.new_game_display.create_text(WINDOW_WIDTH / 2,
-                                          WINDOW_HEIGHT / 2,
+                                          WINDOW_HEIGHT / 4,
                                           font=("Purisa", 20),
                                           fill='white',
                                           text='WELCOME')
 
-        self.new_game_display.grid(row=0)
-        self.new_game_button_human.grid(row=1)
-        self.new_game_button_computer.grid(row=2)
+        self.new_game_display.grid(row=3, column=0, columnspan=2)
+        self.new_game_caption.grid(row=0, column=0, columnspan=2)
+        self.new_game_button_player1_human.grid(row=1, column=0)
+        self.new_game_button_player1_computer.grid(row=2, column=0)
+        self.new_game_button_player2_human.grid(row=1, column=1)
+        self.new_game_button_player2_computer.grid(row=2, column=1)
+        self.new_game_button.grid(row=4, columnspan=2)
+
 
     ##### - GRAPHICAL ELEMENTS TAGS - #####
 
@@ -181,18 +193,30 @@ class GUI():
 
     ##### - GAME & GUI METHODS - #####
 
-    def start_new_game(self, player1, player2):
+    def start_new_game(self):
         """ starts a new game """
         self.interrupt_players()
 
         self.game = Game.Game()
-        self.player1 = player1
-        self.player2 = player2
+
+        if self.new_player1.get() == "Human":
+            self.player1 = Player.Human(self)
+        elif self.new_player1.get() == "Computer":
+            self.player1 = Computer.Computer(self, Minimax.Minimax(3))
+
+        if self.new_player2.get() == "Human":
+            self.player2 = Player.Human(self)
+        elif self.new_player2.get() == "Computer":
+            self.player2 = Computer.Computer(self, Minimax.Minimax(3))
 
         # show the main game window
         self.new_game_display.grid_remove()
-        self.new_game_button_human.grid_remove()
-        self.new_game_button_computer.grid_remove()
+        self.new_game_caption.grid_remove()
+        self.new_game_button_player1_human.grid_remove()
+        self.new_game_button_player1_computer.grid_remove()
+        self.new_game_button_player2_human.grid_remove()
+        self.new_game_button_player2_computer.grid_remove()
+        self.new_game_button.grid_remove()
         self.game_window.grid(row=0)
         self.feedback_caption.grid(row=12)
 
@@ -326,6 +350,8 @@ class GUI():
     def restart_game(self):
         """ switches the game back to the starting window """
         # hide the game over screen
+        self.game_window.grid_remove()
+        self.feedback_caption.grid_remove()
         self.game_over_display.grid_remove()
         self.restart_button.grid_remove()
         self.feedback_modifiers_player1.grid_remove()
@@ -335,9 +361,13 @@ class GUI():
         self.game_over_display.delete(GUI.TAG_RESULT)
 
         # show the new game screen
-        self.new_game_display.grid(row=0)
-        self.new_game_button_human.grid(row=1)
-        self.new_game_button_computer.grid(row=2)
+        self.new_game_display.grid(row=3, column=0, columnspan=2)
+        self.new_game_caption.grid(row=0, column=0, columnspan=2)
+        self.new_game_button_player1_human.grid(row=1, column=0)
+        self.new_game_button_player1_computer.grid(row=2, column=0)
+        self.new_game_button_player2_human.grid(row=1, column=1)
+        self.new_game_button_player2_computer.grid(row=2, column=1)
+        self.new_game_button.grid(row=4, columnspan=2)
 
 
     def interrupt_players(self):
