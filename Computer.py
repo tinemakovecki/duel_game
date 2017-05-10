@@ -14,7 +14,7 @@ class Computer:
         """ plays the turn selected by the algorithm """
         # creating a new thread for the algorithm which uses a copy of the game
         self.thinker = threading.Thread(
-            target=lambda: self.algorithm.select_attack(self.gui.Game.copy()))
+            target=lambda: self.algorithm.select_attack(self.gui.game.copy()))
 
         # actually start the thread
         self.thinker.start()

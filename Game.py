@@ -90,27 +90,28 @@ class Game():
         # if the attack hits move on to the effects
         if hit_check:
             self.return_opponent().hp -= damage_dealt
-            # a modifier activates sometimes, half the time for now
-            if random.random() > 1/2:
-                new_mod = selected_attack.modifier # direct call instead of constructor, MIGHT EDIT ORIGINAL!?
-                if new_mod[3]: # check if modifier targets opponent
-                    same_mod = None
-                    for (turn_number, mod) in defender_mods:
-                        if mod[0] == new_mod[0]:
-                            same_mod = mod
-                            same_mod_turn = turn_number
-                    if same_mod is not None:
-                        defender_mods.remove((same_mod_turn, same_mod))
-                    defender_mods.append((self.turn_number, new_mod))
-                else:
-                    same_mod = None
-                    for (turn_number, mod) in attacker_mods:
-                        if mod[0] == new_mod[0]:
-                            same_mod = mod
-                            same_mod_turn = turn_number
-                    if same_mod is not None:
-                        attacker_mods.remove((same_mod_turn, same_mod))
-                    attacker_mods.append((self.turn_number, new_mod))
+
+            # the attack's modifier affects the opponent
+            # TODO DEBUG: can the same mod stack?
+            new_mod = selected_attack.modifier
+            if new_mod[3]: # check if modifier targets opponent
+                same_mod = None
+                for (turn_number, mod) in defender_mods:
+                    if mod[0] == new_mod[0]:
+                        same_mod = mod
+                        same_mod_turn = turn_number
+                if same_mod is not None:
+                    defender_mods.remove((same_mod_turn, same_mod))
+                defender_mods.append((self.turn_number, new_mod))
+            else:
+                same_mod = None
+                for (turn_number, mod) in attacker_mods:
+                    if mod[0] == new_mod[0]:
+                        same_mod = mod
+                        same_mod_turn = turn_number
+                if same_mod is not None:
+                    attacker_mods.remove((same_mod_turn, same_mod))
+                attacker_mods.append((self.turn_number, new_mod))
 
         # defines which player played the turn
         # change into Bool?

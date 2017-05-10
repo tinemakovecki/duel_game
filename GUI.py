@@ -175,6 +175,10 @@ class GUI():
         self.new_game_button_human.grid(row=1)
         self.new_game_button_computer.grid(row=2)
 
+    ##### - GRAPHICAL ELEMENTS TAGS - #####
+
+    TAG_RESULT = 'result'
+
     ##### - GAME & GUI METHODS - #####
 
     def start_new_game(self, player1, player2):
@@ -304,11 +308,13 @@ class GUI():
         self.restart_button.grid()
         if self.game.winner == "Player 1":
             self.game_over_display.create_text(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2,
-                                               font=("Purisa", 20), justify="center", fill='white',
+                                               font=("Purisa", 20), justify="center",
+                                               fill='white', tag=GUI.TAG_RESULT,
                                                text='GAME OVER\nwinner:\n{}'.format(self.game.player1.name))
         elif self.game.winner == "Player 2":
             self.game_over_display.create_text(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2,
-                                               font=("Purisa", 20), justify="center", fill='white',
+                                               font=("Purisa", 20), justify="center",
+                                               fill='white', tag=GUI.TAG_RESULT,
                                                text='GAME OVER\nwinner:\n{}'.format(self.game.player2.name))
         else:
             assert False; "Game is not over yet"
@@ -325,10 +331,13 @@ class GUI():
         self.feedback_modifiers_player1.grid_remove()
         self.feedback_modifiers_player2.grid_remove()
 
+        # clear last game's results
+        self.game_over_display.delete(GUI.TAG_RESULT)
+
         # show the new game screen
         self.new_game_display.grid(row=0)
         self.new_game_button_human.grid(row=1)
-        self.new_game_button_computer.grid(row=1)
+        self.new_game_button_computer.grid(row=2)
 
 
     def interrupt_players(self):

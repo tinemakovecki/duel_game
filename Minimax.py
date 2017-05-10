@@ -43,7 +43,7 @@ class Minimax():
 
         if self.game.return_opponent().hp <= 0:
             return Minimax.VICTORY
-        elif self.game.Current_player.hp <= 0:
+        elif self.game.current_player.hp <= 0:
             return -Minimax.VICTORY
 
         # the basis is the health difference
@@ -76,12 +76,12 @@ class Minimax():
 
         # check if the game is over, if so, return (None, game state value)
         if not self.game.game_active:
-            if self.game.winner == self.game.player1:
+            if self.game.winner == 'Player 1':
                 return (None, Minimax.VICTORY)
-            elif self.game.winner == self.game.player2:
+            elif self.game.winner == 'Player 2':
                 return (None, -Minimax.VICTORY)
             else:
-                assert (self.game.winner != 'undefined'), 'minimax: game is over without a winner'
+                return 'ERROR: minimax end game'
 
         # game isn't over
         else:
