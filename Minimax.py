@@ -31,7 +31,6 @@ class Minimax():
             # select and make the attack if not interrupted
             logging.debug("minimax: attack {0}, value {1}".format(attack, value))
             self.selected_attack = attack
-            print('{} value:{}'.format(attack, value))
 
 
     # game value constants
