@@ -100,20 +100,22 @@ class GUI():
         self.player2_button4.grid(row=1, column=2, columnspan=2)
 
 
-        # declaring health bars and modifiers feedback caption, they are changed later
+        # declaring health bars, they are changed later
         self.player1_health_bar = None
         self.player1_shown_health = None
 
         self.player2_health_bar = None
         self.player2_shown_health = None
 
+        # modifiers feedback caption
         self.feedback_modifiers_player1_text = tkinter.StringVar(self.game_window)
         self.feedback_modifiers_player2_text = tkinter.StringVar(self.game_window)
-        self.feedback_modifiers_player1 = None
-        self.feedback_modifiers_player2 = None
+        self.feedback_modifiers_player1 = tkinter.Label(self.game_window, height=2, wraplength=WINDOW_WIDTH * 1.9,
+                                                        textvariable=self.feedback_modifiers_player1_text)
+        self.feedback_modifiers_player2 = tkinter.Label(self.game_window, height=2, wraplength=WINDOW_WIDTH * 1.9,
+                                                        textvariable=self.feedback_modifiers_player2_text)
 
-
-        # caption
+        # general feedback caption
         self.feedback_caption_text = tkinter.StringVar(self.game_window, value="Welcome!")
         self.feedback_caption = tkinter.Label(master, textvariable=self.feedback_caption_text)
 
@@ -260,12 +262,12 @@ class GUI():
         self.feedback_caption_text.set("Welcome!")
 
 
-        self.feedback_modifiers_player1 = tkinter.Label(self.game_window, height=2, wraplength=WINDOW_WIDTH * 1.9,
-                                                        textvariable=self.feedback_modifiers_player1_text)
+#        self.feedback_modifiers_player1 = tkinter.Label(self.game_window, height=2, wraplength=WINDOW_WIDTH * 1.9,
+#                                                        textvariable=self.feedback_modifiers_player1_text)
         self.feedback_modifiers_player1.grid(row=7, rowspan=2, column=0, columnspan=4)
 
-        self.feedback_modifiers_player2 = tkinter.Label(self.game_window, height=2, wraplength=WINDOW_WIDTH * 1.9,
-                                                        textvariable=self.feedback_modifiers_player2_text)
+#        self.feedback_modifiers_player2 = tkinter.Label(self.game_window, height=2, wraplength=WINDOW_WIDTH * 1.9,
+#                                                        textvariable=self.feedback_modifiers_player2_text)
         self.feedback_modifiers_player2.grid(row=2, rowspan=2, column=0, columnspan=4)
 
 
