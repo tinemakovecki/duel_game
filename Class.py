@@ -67,7 +67,7 @@ def create_pika():
     attack1 = Attack('Lightning', 70, 60, ('Shock', -10, -10, True))
     attack2 = Attack('Scratch', 50, 80, ('Bleed', -10, 0, True))
     attack3 = Attack('Tackle', 50, 67, ('Knockdown', -5, -12, True))
-    attack4 = Attack('Paralyze', 20, 80, ('Paralysis', -10, -25, True))
+    attack4 = Attack('Paralyze', 35, 80, ('Paralysis', -10, -25, True))
 
     # monster = (name, HP, attack1, attack2, attack3, attack4)
     pika = Monster('Pikachu', 500, attack1, attack2, attack3, attack4)
