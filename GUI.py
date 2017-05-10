@@ -7,6 +7,7 @@ import Game
 import Player
 import Computer
 import Minimax
+from Help import *
 
 root = tkinter.Tk()
 root.title("Duel Game")
@@ -19,27 +20,27 @@ class GUI():
 
 
     def __init__(self, master):
-        # not yet defined, just declared for __init__
+        # attributes not yet defined, just declared for now
         self.game = None
         self.player1 = None
         self.player2 = None
 
-        # window
+        # GAME WINDOW
         self.game_window = tkinter.Frame(master, width=WINDOW_WIDTH, height=WINDOW_HEIGHT)
 
-        # Main menu
+        # GAME MENU
         self.main_menu = tkinter.Menu(master)
         master.config(menu=self.main_menu)
 
         # Submenu
         self.game_options_menu = tkinter.Menu(self.main_menu, tearoff=0)
         self.main_menu.add_cascade(label="Game", menu=self.game_options_menu)
-        self.game_options_menu.add_command(label="Help", command=self.help)
-        self.game_options_menu.add_command(label="Quit", command=self.quit)
+        self.game_options_menu.add_command(label="Help", command=help)
         self.game_options_menu.add_command(label="New game", command=self.restart_game)
+        self.game_options_menu.add_command(label="Quit", command=self.quit)
 
 
-        # buttons
+        # BUTTONS
         # player 1 is at the bottom
         self.player1_button1_text = tkinter.StringVar()
         self.player1_button1 = tkinter.Button(self.game_window, height=2, width=8,
@@ -100,18 +101,22 @@ class GUI():
         self.player2_button4.grid(row=1, column=2, columnspan=2)
 
 
-        # declaring health bars, they are changed later
+        # HEALTH BARS
+        # they are declared, the actual widgets are created later
         self.player1_health_bar = None
         self.player1_shown_health = None
 
         self.player2_health_bar = None
         self.player2_shown_health = None
 
-        # modifiers feedback caption
+        # FEEDBACK CAPTIONS
+        # modifiers active on player 1
         self.feedback_modifiers_player1_text = tkinter.StringVar(self.game_window)
-        self.feedback_modifiers_player2_text = tkinter.StringVar(self.game_window)
         self.feedback_modifiers_player1 = tkinter.Label(self.game_window, height=2, wraplength=WINDOW_WIDTH * 1.9,
                                                         textvariable=self.feedback_modifiers_player1_text)
+
+        # modifiers active on player 2
+        self.feedback_modifiers_player2_text = tkinter.StringVar(self.game_window)
         self.feedback_modifiers_player2 = tkinter.Label(self.game_window, height=2, wraplength=WINDOW_WIDTH * 1.9,
                                                         textvariable=self.feedback_modifiers_player2_text)
 
@@ -120,7 +125,7 @@ class GUI():
         self.feedback_caption = tkinter.Label(master, textvariable=self.feedback_caption_text)
 
 
-        # game image
+        # GAME IMAGE
         self.game_picture = tkinter.Canvas(self.game_window, background='white')
         self.game_picture.grid(row=5, rowspan=2, column=0, columnspan=4)
 
@@ -128,7 +133,7 @@ class GUI():
         self.background_image = tkinter.PhotoImage(file='background.png')
         self.background = self.game_picture.create_image(200, 200, image=self.background_image)
 
-        # creating sprites
+        # declaring sprites, they are imported at the start of the game
         self.player1_sprite_image = None
         self.player1_sprite = None
 
@@ -136,7 +141,7 @@ class GUI():
         self.player2_sprite = None
 
 
-        # game over screen
+        # GAME OVER SCREEN
         self.restart_button = tkinter.Button(master,
                                              text='Restart',
                                              command=lambda: self.restart_game())
@@ -146,7 +151,7 @@ class GUI():
                                                 background='black')
 
 
-        # new game screen
+        # NEW GAME SCREEN
         self.new_game_caption = tkinter.Label(master, text="Select options for both players")
         self.new_player1 = tkinter.StringVar()
         self.new_player1.set("Human")
@@ -154,32 +159,42 @@ class GUI():
         self.new_player2.set("Human")
 
 
-        self.new_game_button_player1_human = tkinter.Radiobutton(master, text="Human", justify='left',
+        # options to select human or computer players
+        # select player 1
+        self.new_game_button_player1_human = tkinter.Radiobutton(master,
+                                                                 text="Human", justify='left',
                                                                  variable=self.new_player1, value="Human")
-        self.new_game_button_player1_computer = tkinter.Radiobutton(master, text="Computer", justify='left',
+
+        self.new_game_button_player1_computer = tkinter.Radiobutton(master,
+                                                                    text="Computer", justify='left',
                                                                     variable=self.new_player1, value="Computer")
 
-        self.new_game_button_player2_human = tkinter.Radiobutton(master, text="Human", justify='left',
+        # select player 2
+        self.new_game_button_player2_human = tkinter.Radiobutton(master,
+                                                                 text="Human", justify='left',
                                                                  variable=self.new_player2, value="Human")
 
-        self.new_game_button_player2_computer = tkinter.Radiobutton(master, text="Computer", justify='left',
+        self.new_game_button_player2_computer = tkinter.Radiobutton(master,
+                                                                    text="Computer", justify='left',
                                                                     variable=self.new_player2, value="Computer")
 
+        # start game button
         self.new_game_button = tkinter.Button(master, text='Start new game',
                                               command=lambda: self.start_new_game())
 
-
+        # background
         self.new_game_display = tkinter.Canvas(master,
                                                width=WINDOW_WIDTH,
                                                height=WINDOW_HEIGHT // 2,
                                                background='black')
-
+        # welcome text
         self.new_game_display.create_text(WINDOW_WIDTH / 2,
                                           WINDOW_HEIGHT / 4,
                                           font=("Purisa", 20),
                                           fill='white',
                                           text='WELCOME')
 
+        # grid-ing and showing all of the elements in new game window
         self.new_game_display.grid(row=3, column=0, columnspan=2)
         self.new_game_caption.grid(row=0, column=0, columnspan=2)
         self.new_game_button_player1_human.grid(row=1, column=0)
@@ -192,6 +207,7 @@ class GUI():
     ##### - GRAPHICAL ELEMENTS TAGS - #####
 
     TAG_RESULT = 'result'
+
 
     ##### - GAME & GUI METHODS - #####
 
@@ -222,7 +238,7 @@ class GUI():
         self.game_window.grid(row=0)
         self.feedback_caption.grid(row=12)
 
-        # changing the text on player 1 buttons
+        # setting the text on player 1 buttons
         self.player1_button1_text.set("{}\n {}/{}".format(self.game.player1.attack1.name,
                                                           self.game.player1.attack1.damage,
                                                           self.game.player1.attack1.hit_chance))
@@ -239,7 +255,7 @@ class GUI():
                                                           self.game.player1.attack4.damage,
                                                           self.game.player1.attack4.hit_chance))
 
-        # changing the text on player 2 buttons
+        # setting the text on player 2 buttons
         self.player2_button1_text.set("{}\n {}/{}".format(self.game.player2.attack1.name,
                                                           self.game.player2.attack1.damage,
                                                           self.game.player2.attack1.hit_chance))
@@ -256,18 +272,13 @@ class GUI():
                                                           self.game.player2.attack4.damage,
                                                           self.game.player2.attack4.hit_chance))
 
-        # reseting the variable captions
+        # resetting the variable captions
         self.feedback_modifiers_player1_text.set("No modifiers affecting {}".format(self.game.player1.name))
         self.feedback_modifiers_player2_text.set("No modifiers affecting {}".format(self.game.player2.name))
         self.feedback_caption_text.set("Welcome!")
 
-
-#        self.feedback_modifiers_player1 = tkinter.Label(self.game_window, height=2, wraplength=WINDOW_WIDTH * 1.9,
-#                                                        textvariable=self.feedback_modifiers_player1_text)
+        # showing modifier status bars
         self.feedback_modifiers_player1.grid(row=7, rowspan=2, column=0, columnspan=4)
-
-#        self.feedback_modifiers_player2 = tkinter.Label(self.game_window, height=2, wraplength=WINDOW_WIDTH * 1.9,
-#                                                        textvariable=self.feedback_modifiers_player2_text)
         self.feedback_modifiers_player2.grid(row=2, rowspan=2, column=0, columnspan=4)
 
 
@@ -278,7 +289,7 @@ class GUI():
                                                   maximum=self.game.player1.hp,
                                                   value=self.game.player1.hp)
         self.player1_health_bar.grid(row=9, column=1, columnspan=2)
-        self.player1_shown_health = self.game.player1.hp # TODO numvar?!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        self.player1_shown_health = self.game.player1.hp
 
         self.player2_health_bar = ttk.Progressbar(self.game_window,
                                                   orient="horizontal",
@@ -286,7 +297,7 @@ class GUI():
                                                   maximum=self.game.player2.hp,
                                                   value=self.game.player2.hp)
         self.player2_health_bar.grid(row=4, column=1, columnspan=2)
-        self.player2_shown_health = self.game.player2.hp # TODO numvar?
+        self.player2_shown_health = self.game.player2.hp
 
 
         # loading player sprites
@@ -326,17 +337,22 @@ class GUI():
 
     def end_game(self):
         """ ends the game """
+        # hides the gameplay window
         self.game_window.grid_remove()
         self.feedback_caption.grid_remove()
         self.feedback_modifiers_player1.grid_remove()
         self.feedback_modifiers_player2.grid_remove()
         self.game_over_display.grid()
         self.restart_button.grid()
+
+        # player 1 won
         if self.game.winner == "Player 1":
             self.game_over_display.create_text(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2,
                                                font=("Purisa", 20), justify="center",
                                                fill='white', tag=GUI.TAG_RESULT,
                                                text='GAME OVER\nwinner:\n{}'.format(self.game.player1.name))
+
+        # player 2 won
         elif self.game.winner == "Player 2":
             self.game_over_display.create_text(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2,
                                                font=("Purisa", 20), justify="center",
@@ -345,12 +361,12 @@ class GUI():
         else:
             assert False; "Game is not over yet"
 
-        # TODO unbind the buttons / disable playing
-        # self.Player = None
-
 
     def restart_game(self):
         """ switches the game back to the starting window """
+        # interrupt the players
+        self.interrupt_players()
+
         # hide the game over screen
         self.game_window.grid_remove()
         self.feedback_caption.grid_remove()
@@ -381,48 +397,65 @@ class GUI():
 
     def show_turn_results(self, active_player, hit_check, damage_dealt):  # # default value=zero?
         """ updates the current state of the game in the GUI """
-        # first case if the attack landed
+        # first case is if the attack landed
         if hit_check:
+            # if the turn was performed by player 1:
             if active_player == 'Player 1':
                 self.player2_shown_health = self.game.player2.hp
                 self.player2_health_bar["value"] = self.player2_shown_health
                 self.feedback_caption_text.set("{0} suffers {1} damage. {0}'s turn".format(self.game.player2.name,
                                                                                            damage_dealt))
+            # turn was by player 2:
             elif active_player == 'Player 2':
                 self.player1_shown_health = self.game.player1.hp
                 self.player1_health_bar["value"] = self.player1_shown_health
                 self.feedback_caption_text.set("{0} suffers {1} damage. {0}'s turn".format(self.game.player1.name,
                                                                                            damage_dealt))
+            # there was a mistake:
             else:
                 assert False, "invalid player"
-            # updating modifiers feedback
-            if len(self.game.player1.active_modifiers) == 0:
+
+
+            # updating modifier status bars
+            # player 1
+            if len(self.game.player1.active_modifiers) == 0:  # no active modifiers
                 self.feedback_modifiers_player1_text.set("No modifiers affecting {}".format(self.game.player1.name))
+
             else:
                 name, damage_effect, hit_effect, target = self.game.player1.active_modifiers[0][1]
                 mod_str = "{}:{}/{}".format(name, damage_effect, hit_effect)
+
                 for (turn_number, mod) in self.game.player1.active_modifiers[1:]:
                     mod_str += ", {}:{}/{}".format(mod[0], mod[1], mod[2])
+
                 self.feedback_modifiers_player1_text.set(
                     "Modifiers affecting {}: {}".format(self.game.player1.name, mod_str))
-            if len(self.game.player2.active_modifiers) == 0:
+
+            # player 2
+            if len(self.game.player2.active_modifiers) == 0:  # no active modifiers
                 self.feedback_modifiers_player2_text.set("No modifiers affecting {}".format(self.game.player2.name))
+
             else:
                 name, damage_effect, hit_effect, target = self.game.player2.active_modifiers[0][1]
                 mod_str = "{}:{}/{}".format(name, damage_effect, hit_effect)
+
                 for (turn_number, mod) in self.game.player2.active_modifiers[1:]:
                     mod_str += ", {}:{}/{}".format(mod[0], mod[1], mod[2])
+
                 self.feedback_modifiers_player2_text.set(
                     "Modifiers affecting {}: {}".format(self.game.player2.name, mod_str))
-        # the attack missed
+
+        # if the attack missed
         else:
             self.feedback_caption_text.set("Missed! {}'s turn.".format(self.game.current_player.name))
+
 
     ###  METHODS FOR ATTACK BUTTONS ###
 
     def select_attack_for_player1(self, attack_number, certain_hit=None):
         """ selects an attack for Player 1 after receiving the attack number """
         if self.game.current_player == self.game.player1:
+            # call the right attack after comparing numbers
             if attack_number == 1:
                 self.player1.make_attack(self.game.player1.attack1, certain_hit)
                 return self.game.player1.attack1
@@ -435,6 +468,8 @@ class GUI():
             elif attack_number == 4:
                 self.player1.make_attack(self.game.player1.attack4, certain_hit)
                 return self.game.player1.attack4
+
+        # if the current player isn't right
         else:
             return
 
@@ -442,6 +477,7 @@ class GUI():
     def select_attack_for_player2(self, attack_number, certain_hit=None):
         """ selects an attack for Player 2 after receiving a number, returns the selected attack """
         if self.game.current_player == self.game.player2:
+            # call the right attack after comparing numbers
             if attack_number == 1:
                 self.player2.make_attack(self.game.player2.attack1, certain_hit)
                 return self.game.player2.attack1
@@ -454,6 +490,8 @@ class GUI():
             elif attack_number == 4:
                 self.player2.make_attack(self.game.player2.attack4, certain_hit)
                 return self.game.player2.attack4
+
+        # if the current player isn't right
         else:
             return
 
@@ -463,26 +501,6 @@ class GUI():
         """ closes the game window """
         self.interrupt_players()
         root.destroy()
-
-    def help(self):
-        """Instructions for players"""
-        help = tkinter.Toplevel()
-        help.title("Help")
-
-        general = tkinter.Frame(help)
-        general.pack(expand="yes", fill="both")
-        gen_instructions = tkinter.Label(general, text="Instructions for Duel Game")
-        gen_instructions.pack()
-
-        modifiers = tkinter.Frame(help)
-        modifiers.pack(expand="yes", fill="both")
-        mod_instructions = tkinter.Label(modifiers, text="Instructions for Modifiers")
-        mod_instructions.pack()
-
-        attacks = tkinter.Frame(help)
-        attacks.pack(expand="yes", fill="both")
-        att_instructions = tkinter.Label(modifiers, text="Instructions for Attacks")
-        att_instructions.pack()
 
 
 app = GUI(root)

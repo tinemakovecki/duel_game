@@ -31,6 +31,7 @@ class Minimax():
             # select and make the attack if not interrupted
             logging.debug("minimax: attack {0}, value {1}".format(attack, value))
             self.selected_attack = attack
+            print('{} value:{}'.format(attack, value))
 
 
     # game value constants
@@ -47,7 +48,7 @@ class Minimax():
             return -Minimax.VICTORY
 
         # the basis is the health difference
-        value = (self.game.current_player.hp - self.game.return_opponent().hp) * 100
+        value = (self.game.current_player.hp - self.game.return_opponent().hp) * 250
 
         # also look at active modifiers
         # first for Player 1

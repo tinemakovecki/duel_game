@@ -3,12 +3,12 @@
 
 # ATTACK CLASS
 class Attack:
-    def __init__(self, name, damage, hit_chance, modifier): # modifier = (name, DMG effect, hit effect, target opponent)
+    def __init__(self, name, damage, hit_chance, modifier):
         self.name = name
         self.damage = damage
         self.hit_chance = hit_chance
+        # modifier = (name, DMG effect, hit effect, target opponent)
         self.modifier = modifier
-        # TODO empty modifier?
 
     # methods for calling retrieving properties
     def modifier_name(self):
@@ -31,9 +31,10 @@ class Attack:
 
 # MONSTER CLASS
 class Monster:
-    def __init__(self, name, hp, attack1, attack2, attack3, attack4): # the attack arguments should belong to Attack() class!
+    def __init__(self, name, hp, attack1, attack2, attack3, attack4):
+        # the attack arguments belong to Attack class!
         self.name = name
-        self.hp = hp # TODO seperate current and full health?
+        self.hp = hp
         self.attack1 = attack1
         self.attack2 = attack2
         self.attack3 = attack3
@@ -76,16 +77,15 @@ def create_pika():
 
 def copy_monster(monster):
     """ returns a copy of the given monster """
-    # generate a monster of the right type
+    # check the monter type, generate a monster of the same type
     if monster.name == 'Pikachu':
         monster_copy = create_pika()
     elif monster.name == 'Charmander':
         monster_copy = create_char()
 
-    # change life and modifier to match the given monster's
+    # change life and modifier to match the given monster
     monster_copy.hp = monster.hp
     monster_copy.active_modifiers = [mod for mod in monster.active_modifiers]
-    # TODO copy mods?
 
     # return the copy
     return monster_copy

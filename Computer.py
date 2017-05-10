@@ -1,6 +1,7 @@
 ####### - COMUPTER PLAYER - #######
 
 import threading
+import logging
 
 
 class Computer:

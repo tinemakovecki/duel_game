@@ -4,14 +4,15 @@ import Class # TODO put the file in the right place
 
 class Game():
     def __init__(self):
-        # TODO add monster choice option
+        # use monster class constructors to create player characters
         self.player1 = Class.create_pika()
         self.player2 = Class.create_char()
 
+        # starting attributes
         self.current_player = self.player1
         self.turn_number = 1
         self.game_active = True
-        self.winner = 'undefined' # change to None?
+        self.winner = 'undefined'
         self.history = []
 
 
@@ -28,14 +29,16 @@ class Game():
         else:
             active_player = 'player 2'
 
+        # add this information to history list
         self.history.append((turn_number, active_player, player_1, player_2))
 
 
     def copy(self):
         """ copies the game in its current state without history and returns the copy """
-        # generate new game and adjust it
+        # create a new game and adjust it
         game_copy = Game()
         game_copy.turn_number = self.turn_number
+        # copy player characters
         game_copy.player1 = Class.copy_monster(self.player1)
         game_copy.player2 = Class.copy_monster(self.player2)
         # reference the right player as the current player
@@ -51,12 +54,14 @@ class Game():
         """ reverses one move and returns to the previous game state """
         # assign previous values to game variables and remove one entry from game history
         (self.turn_number, active_player, self.player1, self.player2) = self.history.pop()
-        # assign the right Current_player
+
+        # assign the right current player
         if active_player == 'player 1':
             self.current_player = self.player1
         elif active_player == 'player 2':
             self.current_player = self.player2
-        else:
+
+        else:  # there was an error with deciding the current player
             assert False, " reversing moves player assignment broke "
 
 
@@ -66,14 +71,15 @@ class Game():
             return self.player2
         elif self.current_player == self.player2:
             return self.player1
-        else:
+
+        else:  # raise error
             assert False, "invalid opponent"
-        # TODO - better done with tags?
 
 
     def take_turn(self, selected_attack, certain_hit):
         ''' completes a single game turn, returns pair (winner, damage dealt) '''
         self.save_state()  # save current state before doing anything
+        # reference the active modifier lists
         attacker_mods = self.current_player.active_modifiers
         defender_mods = self.return_opponent().active_modifiers
         damage_dealt = calculate_damage(selected_attack, attacker_mods)
@@ -92,29 +98,41 @@ class Game():
             self.return_opponent().hp -= damage_dealt
 
             # the attack's modifier affects the opponent
-            # TODO DEBUG: can the same mod stack?
             new_mod = selected_attack.modifier
-            if new_mod[3]: # check if modifier targets opponent
+
+            if new_mod[3]:  # check if the modifier targets opponent
                 same_mod = None
+
+                # check if the modifier is already active
                 for (turn_number, mod) in defender_mods:
                     if mod[0] == new_mod[0]:
                         same_mod = mod
                         same_mod_turn = turn_number
+
+                # if the modifier is already active, we remove the old entry
                 if same_mod is not None:
                     defender_mods.remove((same_mod_turn, same_mod))
+
+                # add the modifier to active modifiers
                 defender_mods.append((self.turn_number, new_mod))
-            else:
+
+            else:  # the modifier doesn't target the opponent
                 same_mod = None
+
+                # check if the modifier is already active
                 for (turn_number, mod) in attacker_mods:
                     if mod[0] == new_mod[0]:
                         same_mod = mod
                         same_mod_turn = turn_number
+
+                # if the modifier is already active, we remove the old entry
                 if same_mod is not None:
                     attacker_mods.remove((same_mod_turn, same_mod))
+
+                # add the modifier to active modifiers
                 attacker_mods.append((self.turn_number, new_mod))
 
         # defines which player played the turn
-        # change into Bool?
         if self.current_player == self.player1:
             active_player = 'Player 1'
         elif self.current_player == self.player2:
